@@ -1,0 +1,180 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Resume Container - A4/Letter Size */
+.ats-resume,
+.modern-template {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 10pt;
+  line-height: 1.4; /* Consistent with document's moderate line height */
+  color: #000;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 10mm;
+  background: white;
+}
+
+/* Section Container - Consistent Layout */
+.resume-section,
+.modern-section {
+  margin-bottom: 10mm;
+  width: 100%;
+  max-width: 210mm;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Section Items - Fixed Structure */
+.experience-item,
+.education-item,
+.project-item {
+  margin-bottom: 5mm;
+  width: 100%;
+  max-width: 210mm;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.item-content {
+  flex-grow: 1;
+}
+
+/* Header/Title Consistency */
+.resume-header h1,
+.modern-header h1 {
+  font-size: 24pt;
+  margin: 0 0 5mm 0;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.contact-info {
+  font-size: 10pt;
+  margin-bottom: 10mm;
+  text-align: center;
+}
+
+.contact-info span {
+  margin: 0 5mm;
+}
+
+.resume-section h2,
+.modern-section h2 {
+  font-size: 14pt;
+  margin: 0 0 5mm 0;
+  padding: 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+}
+
+/* Content Styling */
+.position-title,
+.degree-info,
+.project-tech,
+.experience-dates,
+.education-dates,
+.project-dates,
+.education-gpa {
+  font-size: 10pt;
+  margin-bottom: 2mm;
+}
+
+.experience-description,
+.education-description,
+.project-description {
+  font-size: 10pt;
+  margin-bottom: 3mm;
+  white-space: pre-line;
+}
+
+/* Bullet Lists - Semantic and LaTeX-like */
+.bullet-list {
+  list-style-type: disc;
+  margin: 3mm 0 0 10mm;
+  padding-left: 5mm;
+}
+
+.bullet-list li {
+  margin-bottom: 2mm;
+  font-size: 10pt;
+  line-height: 1.4;
+}
+
+/* Skills and Others */
+.skills-container,
+.languages-item,
+.extraCurriculars-item {
+  margin-top: 3mm;
+}
+
+.skill-category,
+.languages-item p,
+.extraCurriculars-item p {
+  margin-bottom: 2mm;
+}
+
+/* Date Styling - RHS Bold */
+.date-rhs {
+  font-weight: bold;
+  text-align: right;
+  margin-left: 10mm; /* Space between content and date */
+  white-space: nowrap;
+}
+
+/* Print Styles - Optimize for PDF */
+@media print {
+  .ats-resume,
+  .modern-template {
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: 10mm !important;
+    margin: 0 !important;
+    box-shadow: none;
+  }
+
+  .resume-section,
+  .modern-section {
+    margin-bottom: 8mm;
+    max-width: 210mm;
+    break-inside: avoid;
+  }
+
+  .experience-item,
+  .education-item,
+  .project-item {
+    margin-bottom: 4mm;
+    max-width: 210mm;
+    break-inside: avoid;
+  }
+
+  .bullet-list {
+    list-style-type: disc !important;
+    margin: 3mm 0 0 10mm !important;
+    padding-left: 5mm !important;
+  }
+
+  .bullet-list li {
+    margin-bottom: 2mm !important;
+    break-inside: avoid;
+  }
+
+  .date-rhs {
+    font-weight: bold !important;
+    text-align: right !important;
+    margin-left: 10mm !important;
+  }
+
+  .preview-toolbar {
+    display: none;
+  }
+}

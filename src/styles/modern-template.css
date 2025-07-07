@@ -1,0 +1,220 @@
+.modern-template {
+  font-family: "Times New Roman", Times, serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  color: #000;
+  line-height: 1.5; /* Increased for better readability */
+  font-size: 11pt; /* Slightly larger for standard resume */
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.modern-header {
+  margin-bottom: 25px;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #000;
+}
+
+.modern-header h1 {
+  font-size: 20pt; /* Slightly larger for prominence */
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px; /* Slightly increased for elegance */
+}
+
+.contact-info {
+  font-size: 10pt;
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Added for better spacing between contact items */
+}
+
+.contact-item {
+  display: inline;
+}
+
+.modern-section {
+  margin-bottom: 25px;
+}
+
+.modern-section h2 {
+  font-size: 14pt; /* Slightly larger for hierarchy */
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #000;
+  margin: 0 0 15px 0;
+}
+
+.experience-item,
+.education-item,
+.project-item {
+  margin-bottom: 20px;
+  page-break-inside: avoid; /* Prevents splitting across pages */
+}
+
+.experience-header,
+.education-header,
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.experience-left,
+.education-left,
+.project-left {
+  flex: 1;
+}
+
+.experience-right,
+.education-right,
+.project-right {
+  text-align: right;
+  min-width: 150px;
+}
+
+.experience-header h3,
+.education-header h3,
+.project-header h3 {
+  font-size: 12pt; /* Slightly larger for clarity */
+  font-weight: bold;
+  margin: 0 0 4px 0;
+}
+
+.position-title,
+.degree-info,
+.project-tech {
+  font-size: 10pt;
+  font-style: italic;
+  color: #333; /* Slightly darker for contrast */
+}
+
+.experience-dates,
+.education-dates,
+.project-dates,
+.education-gpa {
+  font-size: 10pt;
+  white-space: nowrap;
+}
+
+.education-gpa {
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.experience-location {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.experience-bullets,
+.education-bullets,
+.project-bullets {
+  margin: 10px 0 0 20px;
+  padding: 0;
+  list-style-type: disc;
+}
+
+.experience-bullets li,
+.education-bullets li,
+.project-bullets li {
+  margin-bottom: 6px;
+  font-size: 10pt;
+}
+
+.other-item {
+  margin-bottom: 10px;
+  font-size: 10pt;
+}
+
+.other-item strong {
+  font-weight: bold;
+}
+
+.project-description {
+  font-size: 10pt;
+  margin-top: 8px;
+}
+
+/* Print Styles for ATS and PDF Compatibility */
+@media print {
+  .modern-template {
+    width: 210mm;
+    padding: 15mm;
+    margin: 0;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  .modern-section {
+    margin-bottom: 20px;
+  }
+  .experience-item,
+  .education-item,
+  .project-item {
+    margin-bottom: 15px;
+  }
+  hr {
+    background: #000;
+  }
+}
+/* Project Section Styling */
+.project-item {
+  margin-bottom: 15px;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.project-header h3 {
+  margin: 0;
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+.project-tech {
+  font-size: 10pt;
+  color: #555;
+}
+
+.project-bullets {
+  margin-left: 20px;
+}
+
+.bullet-point {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 3px;
+  font-size: 10pt;
+  line-height: 1.4;
+}
+
+.bullet-point::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* For the specific style in your image */
+.project-item h3 {
+  text-transform: uppercase;
+  font-size: 11pt;
+  letter-spacing: 0.5px;
+}
+
+.project-tech {
+  font-style: italic;
+}
