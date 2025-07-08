@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Layout, ConfigProvider, theme, Menu, Button } from 'antd';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { MenuOutlined } from '@ant-design/icons';
 import useResumeStore from './stores/useResumeStore';
 import PreviewLayout from './components/preview/ResumePreview';
