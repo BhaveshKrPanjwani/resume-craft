@@ -2,7 +2,11 @@ name: Deploy to GitHub Pages
 
 on:
   push:
+<<<<<<< HEAD
     branches: [ main ]
+=======
+    branches: [ master ]  # Use 'master' if that's your main branch
+>>>>>>> c78b0ca096bd121fb89428fad56e0f4ad4756117
 
 jobs:
   deploy:
@@ -28,4 +32,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+<<<<<<< HEAD
           keep_files: true
+=======
+>>>>>>> c78b0ca096bd121fb89428fad56e0f4ad4756117
