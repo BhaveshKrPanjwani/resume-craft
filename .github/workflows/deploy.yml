@@ -1,38 +1,38 @@
-name: Deploy to GitHub Pages
+name: Deploy Frontend to GitHub Pages
 
 on:
   push:
-<<<<<<< HEAD
-    branches: [ main ]
-=======
-    branches: [ master ]  # Use 'master' if that's your main branch
->>>>>>> c78b0ca096bd121fb89428fad56e0f4ad4756117
+    branches:
+      - main  # Trigger on pushes to the 'main' branch
+      - master # Also trigger on pushes to the 'master' branch (if you use it)
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          
+          node-version: 18 # Or your preferred Node.js version (e.g., 20)
+          cache: 'npm' # Cache npm dependencies for faster builds
+          cache-dependency-path: 'client/package-lock.json' # Specify lock file path
+
       - name: Install dependencies
         run: npm install
-      
-      - name: Build with environment variables
+        working-directory: ./client # Crucial: run npm install in the client directory
+
+      - name: Build project
         run: npm run build
+        working-directory: ./client # Crucial: run npm build in the client directory
         env:
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
-          
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }} # This is for your frontend .env variable
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-<<<<<<< HEAD
-          keep_files: true
-=======
->>>>>>> c78b0ca096bd121fb89428fad56e0f4ad4756117
+          publish_dir: ./client/dist # Crucial: specify the path to your client's dist folder
+          # keep_files: true # Only use if you have other files in gh-pages you want to preserve
