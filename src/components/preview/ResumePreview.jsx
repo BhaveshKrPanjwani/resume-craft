@@ -5,6 +5,13 @@ import PDFGenerator from "./PDFGenerator";
 import { useEffect, useState, useRef } from "react";
 import "../../styles/ats-resume.css";
 import { useNavigate } from "react-router-dom";
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaLinkedin,
+} from "react-icons/fa";
+import { FaGithub } from "react-icons/fa6";
 
 const ResumePreview = ({ onBack }) => {
   const [state, setState] = useState(useResumeStore.getState());
@@ -20,9 +27,9 @@ const ResumePreview = ({ onBack }) => {
     achievements = [],
     extraCurriculars = [],
     skills = { frameworks: [], languages: [], tools: [] },
-    resumeMetadata = { template: "basic" },
+    resumeMetadata = { template: "modern" },
   } = state;
-
+  console.log("Template value in ResumePreview:", resumeMetadata.template); // Check the value used for rendering
   useEffect(() => {
     console.log("Subscribing to store in ResumePreview");
     const unsubscribe = useResumeStore.subscribe(
@@ -51,198 +58,239 @@ const ResumePreview = ({ onBack }) => {
       year: "numeric",
     });
   };
+  const renderBulletPoints = (description) => {
+    if (!description) return null;
 
+    // Convert description to array of bullet points
+    let bullets = [];
+
+    // Case 1: Already formatted with bullet points (•)
+    if (description.includes("•")) {
+      bullets = description
+        .split("\n")
+        .filter((line) => line.trim().startsWith("•"))
+        .map((line) => line.trim().slice(1).trim());
+    }
+    // Case 2: Plain text with newlines
+    else if (description.includes("\n")) {
+      bullets = description.split("\n").filter((line) => line.trim());
+    }
+    // Case 3: Single line of text
+    else {
+      bullets = [description];
+    }
+
+    // Ensure we have at least one bullet point
+    if (bullets.length === 0) {
+      bullets = [description || ""]; // Fallback to original description or empty string
+    }
+
+    return (
+      <ul className="bullet-list">
+        {bullets.map((bullet, i) => (
+          <li key={`bullet-${i}`}>{bullet}</li>
+        ))}
+      </ul>
+    );
+  };
   const ModernTemplate = () => {
     const hasLowCGPA = education.some((edu) => {
       const gpa = parseFloat(edu.gpa);
       return !isNaN(gpa) && gpa < 8.5;
     });
 
+    const renderBulletPoints = (description) => {
+      if (!description) return null;
+
+      let bullets = [];
+
+      if (description.includes("•")) {
+        bullets = description
+          .split("\n")
+          .filter((line) => line.trim().startsWith("•"))
+          .map((line) => line.trim().slice(1).trim());
+      } else if (description.includes("\n")) {
+        bullets = description.split("\n").filter((line) => line.trim());
+      } else {
+        bullets = [description];
+      }
+
+      if (bullets.length === 0) {
+        bullets = [description || ""];
+      }
+
+      return (
+        <ul className="latex-bullet-list">
+          {bullets.map((bullet, i) => (
+            <li key={`bullet-${i}`}>{bullet}</li>
+          ))}
+        </ul>
+      );
+    };
+
     return (
-      <div className="modern-template" ref={resumeRef}>
-        <header className="modern-header">
+      <div className="modern-template latex-mode" ref={resumeRef}>
+        <header className="latex-header">
           <h1>{personalInfo.name || "YOUR NAME"}</h1>
-          <div className="contact-info">
+          <div className="latex-contact-info">
             {[
-              personalInfo.email,
-              personalInfo.phone,
-              personalInfo.address,
+              personalInfo.email && (
+                <span key="email" className="contact-item">
+                  <FaEnvelope className="icon" />
+                  <span>{personalInfo.email}</span>
+                </span>
+              ),
+              personalInfo.phone && (
+                <span key="phone" className="contact-item">
+                  <FaPhone className="icon" />
+                  <span>{personalInfo.phone}</span>
+                </span>
+              ),
+              personalInfo.address && (
+                <span key="address" className="contact-item">
+                  <FaMapMarkerAlt className="icon" />
+                  <span>{personalInfo.address}</span>
+                </span>
+              ),
               personalInfo.linkedin && (
                 <a
                   key="linkedin"
-                  href={personalInfo.linkedin}
+                  href={
+                    personalInfo.linkedin.startsWith("http")
+                      ? personalInfo.linkedin
+                      : `https://${personalInfo.linkedin}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="contact-item latex-link"
                 >
-                  LinkedIn
+                  <FaLinkedin className="icon" />
+                  <span>LinkedIn</span>
                 </a>
               ),
               personalInfo.github && (
                 <a
                   key="github"
-                  href={personalInfo.github}
+                  href={
+                    personalInfo.github.startsWith("http")
+                      ? personalInfo.github
+                      : `https://${personalInfo.github}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="contact-item latex-link"
                 >
-                  GitHub
+                  <FaGithub className="icon" />
+                  <span>GitHub</span>
                 </a>
               ),
-            ]
-              .filter(Boolean)
-              .map((item, index, array) => (
-                <span key={index}>
-                  {item}
-                  {index < array.length - 1 && " | "}
-                </span>
-              ))}
+            ].filter(Boolean)}
           </div>
         </header>
 
+        {/* Experience Section */}
         {experience.length > 0 && (
-          <section className="modern-section">
+          <section className="latex-section">
             <h2>EXPERIENCE</h2>
             {experience.map((exp, index) => (
-              <div className="experience-item" key={exp.id || `exp-${index}`}>
-                <div className="item-content">
-                  {exp.company && <p><strong>{exp.company}</strong></p>}
-                  {exp.position && <p>{exp.position}</p>}
-                  {exp.location && <p>{exp.location}</p>}
-                  {exp.description && (
-                    <ul className="bullet-list">
-                      {exp.description
-                        .split("\n")
-                        .filter((line) => line.trim().startsWith("•"))
-                        .map((bullet, i) => (
-                          <li key={`exp-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
-                        ))}
-                    </ul>
-                  )}
-                  {exp.bullets && exp.bullets.length > 0 && (
-                    <ul className="bullet-list">
-                      {exp.bullets.map((bullet, i) => (
-                        <li key={`exp-bullet-${i}`}>{bullet.trim()}</li>
-                      ))}
-                    </ul>
+              <div className="latex-item" key={exp.id || `exp-${index}`}>
+                <div className="latex-item-header">
+                  <div>
+                    <h3 className="latex-item-title">{exp.company}</h3>
+                    <p className="latex-item-subtitle">{exp.position}</p>
+                    {exp.location && (
+                      <p className="latex-item-subtitle">{exp.location}</p>
+                    )}
+                  </div>
+                  {(exp.startDate || exp.endDate || exp.current) && (
+                    <p className="latex-item-date">
+                      {formatDate(exp.startDate)} –{" "}
+                      {exp.current ? "Present" : formatDate(exp.endDate)}
+                    </p>
                   )}
                 </div>
-                {(exp.startDate || exp.endDate || exp.current) && (
-                  <p className="date-rhs"><strong>
-                    {formatDate(exp.startDate)} –{" "}
-                    {exp.current ? "Present" : formatDate(exp.endDate)}
-                  </strong></p>
+                {renderBulletPoints(exp.description)}
+                {exp.bullets && exp.bullets.length > 0 && (
+                  <ul className="latex-bullet-list">
+                    {exp.bullets.map((bullet, i) => (
+                      <li key={`exp-bullet-${i}`}>{bullet.trim()}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             ))}
           </section>
         )}
 
-        {!hasLowCGPA && education.length > 0 && (
-          <section className="modern-section">
+        {/* Education Section */}
+        {education.length > 0 && !hasLowCGPA && (
+          <section className="latex-section">
             <h2>EDUCATION</h2>
             {education.map((edu, index) => (
-              <div className="education-item" key={edu.id || `edu-${index}`}>
-                <div className="item-content">
-                  {edu.institution && <p><strong>{edu.institution}</strong></p>}
-                  {edu.degree && <p>{edu.degree}</p>}
-                  {edu.gpa && <p><strong>CGPA:</strong> {edu.gpa}/10</p>}
-                  {edu.description && (
-                    <ul className="bullet-list">
-                      {edu.description
-                        .split("\n")
-                        .filter((line) => line.trim().startsWith("•"))
-                        .map((bullet, i) => (
-                          <li key={`edu-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
-                        ))}
-                    </ul>
-                  )}
-                  {edu.bullets && edu.bullets.length > 0 && (
-                    <ul className="bullet-list">
-                      {edu.bullets.map((bullet, i) => (
-                        <li key={`edu-bullet-${i}`}>{bullet.trim()}</li>
-                      ))}
-                    </ul>
+              <div className="latex-item" key={edu.id || `edu-${index}`}>
+                <div className="latex-item-header">
+                  <div>
+                    <h3 className="latex-item-title">{edu.institution}</h3>
+                    <p className="latex-item-subtitle">{edu.degree}</p>
+                    {edu.gpa && (
+                      <p className="latex-item-subtitle">
+                        <strong>CGPA:</strong> {edu.gpa}/10
+                      </p>
+                    )}
+                  </div>
+                  {(edu.startDate || edu.endDate || edu.current) && (
+                    <p className="latex-item-date">
+                      {formatDate(edu.startDate)} –{" "}
+                      {edu.current ? "Present" : formatDate(edu.endDate)}
+                    </p>
                   )}
                 </div>
-                {(edu.startDate || edu.endDate || edu.current) && (
-                  <p className="date-rhs"><strong>
-                    {formatDate(edu.startDate)} –{" "}
-                    {edu.current ? "Present" : formatDate(edu.endDate)}
-                  </strong></p>
+                {renderBulletPoints(edu.description)}
+                {edu.bullets && edu.bullets.length > 0 && (
+                  <ul className="latex-bullet-list">
+                    {edu.bullets.map((bullet, i) => (
+                      <li key={`edu-bullet-${i}`}>{bullet.trim()}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             ))}
           </section>
         )}
 
+        {/* Projects Section */}
         {projects.length > 0 && (
-          <section className="modern-section">
+          <section className="latex-section">
             <h2>PROJECTS</h2>
             {projects.map((proj, index) => (
-              <div className="project-item" key={proj.id || `proj-${index}`}>
-                <div className="item-content">
-                  {proj.title && <p><strong>{proj.title}</strong></p>}
-                  {proj.techStack && proj.techStack.length > 0 && <p>{proj.techStack.join(", ")}</p>}
-                  {proj.description && (
-                    <ul className="bullet-list">
-                      {proj.description
-                        .split("\n")
-                        .filter((line) => line.trim().startsWith("•"))
-                        .map((bullet, i) => (
-                          <li key={`proj-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
-                        ))}
-                    </ul>
-                  )}
-                  {proj.bullets && proj.bullets.length > 0 && (
-                    <ul className="bullet-list">
-                      {proj.bullets.map((bullet, i) => (
-                        <li key={`proj-bullet-${i}`}>{bullet.trim()}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-                {(proj.startDate || proj.endDate || proj.current) && (
-                  <p className="date-rhs"><strong>
-                    {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
-                    {proj.current ? "Present" : proj.endDate ? formatDate(proj.endDate) : ""}
-                  </strong></p>
-                )}
-              </div>
-            ))}
-          </section>
-        )}
-
-        {hasLowCGPA && education.length > 0 && (
-          <section className="modern-section">
-            <h2>EDUCATION</h2>
-            {education.map((edu, index) => (
-              <div className="education-item" key={edu.id || `edu-${index}`}>
-                <div className="item-content">
-                  {edu.institution && <p><strong>{edu.institution}</strong></p>}
-                  {edu.degree && <p>{edu.degree}</p>}
-                  {edu.gpa && <p><strong>CGPA:</strong> {edu.gpa}/10</p>}
-                  {edu.description && (
-                    <ul className="bullet-list">
-                      {edu.description
-                        .split("\n")
-                        .filter((line) => line.trim().startsWith("•"))
-                        .map((bullet, i) => (
-                          <li key={`edu-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
-                        ))}
-                    </ul>
-                  )}
-                  {edu.bullets && edu.bullets.length > 0 && (
-                    <ul className="bullet-list">
-                      {edu.bullets.map((bullet, i) => (
-                        <li key={`edu-bullet-${i}`}>{bullet.trim()}</li>
-                      ))}
-                    </ul>
+              <div className="latex-item" key={proj.id || `proj-${index}`}>
+                <div className="latex-item-header">
+                  <div>
+                    <h3 className="latex-item-title">{proj.title}</h3>
+                    {proj.techStack && proj.techStack.length > 0 && (
+                      <p className="latex-item-subtitle">
+                        {proj.techStack.join(", ")}
+                      </p>
+                    )}
+                  </div>
+                  {(proj.startDate || proj.endDate || proj.current) && (
+                    <p className="latex-item-date">
+                      {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
+                      {proj.current
+                        ? "Present"
+                        : proj.endDate
+                        ? formatDate(proj.endDate)
+                        : ""}
+                    </p>
                   )}
                 </div>
-                {(edu.startDate || edu.endDate || edu.current) && (
-                  <p className="date-rhs"><strong>
-                    {formatDate(edu.startDate)} –{" "}
-                    {edu.current ? "Present" : formatDate(edu.endDate)}
-                  </strong></p>
+                {renderBulletPoints(proj.description)}
+                {proj.bullets && proj.bullets.length > 0 && (
+                  <ul className="latex-bullet-list">
+                    {proj.bullets.map((bullet, i) => (
+                      <li key={`proj-bullet-${i}`}>{bullet.trim()}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             ))}
@@ -253,23 +301,36 @@ const ResumePreview = ({ onBack }) => {
           <section className="modern-section">
             <h2>CERTIFICATIONS</h2>
             {certifications.map((cert, index) => (
-              <div key={cert.id || `cert-${index}`}>
+              <div
+                key={cert.id || `cert-${index}`}
+                className="certification-container"
+              >
                 <div className="item-content">
-                  {cert.name && <p><strong>{cert.name}</strong></p>}
-                  {(cert.issuer || cert.date) && (
-                    <p>
-                      {cert.issuer || "Issuing Organization"} •{" "}
-                      {cert.date || "Date"}
-                    </p>
-                  )}
-                  {cert.credentialId && <p>Credential ID: {cert.credentialId}</p>}
+                  <div className="certification-header">
+                    {cert.name && (
+                      <p>
+                        <strong>{cert.name}</strong>
+                      </p>
+                    )}
+                    {(cert.issuer || cert.date) && (
+                      <p>
+                        {cert.issuer || "Issuing Organization"} •{" "}
+                        {cert.date || "Date"}
+                      </p>
+                    )}
+                    {cert.credentialId && (
+                      <p>Credential ID: {cert.credentialId}</p>
+                    )}
+                  </div>
                   {cert.description && (
                     <ul className="bullet-list">
                       {cert.description
                         .split("\n")
                         .filter((line) => line.trim().startsWith("•"))
                         .map((bullet, i) => (
-                          <li key={`cert-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                          <li key={`cert-desc-bullet-${i}`}>
+                            {bullet.trim().slice(1).trim()}
+                          </li>
                         ))}
                     </ul>
                   )}
@@ -281,7 +342,27 @@ const ResumePreview = ({ onBack }) => {
                     </ul>
                   )}
                 </div>
-                {cert.date && <p className="date-rhs"><strong>{cert.date}</strong></p>}
+                <div className="certification-right">
+                  {cert.url && (
+                    <a
+                      href={
+                        cert.url.startsWith("http")
+                          ? cert.url
+                          : `https://${cert.url}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="certificate-link"
+                    >
+                      <span className="link-icon">🔗</span> Certificate
+                    </a>
+                  )}
+                  {cert.date && !cert.url && (
+                    <p className="date-rhs">
+                      <strong>{cert.date}</strong>
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </section>
@@ -291,33 +372,51 @@ const ResumePreview = ({ onBack }) => {
           <section className="modern-section">
             <h2>ACHIEVEMENTS</h2>
             {achievements.map((achievement, index) => (
-              <div key={achievement.id || `ach-${index}`}>
+              <div
+                key={achievement.id || `ach-${index}`}
+                className="achievement-item"
+              >
                 <div className="item-content">
-                  {achievement.title && <p><strong>{achievement.title}</strong></p>}
+                  <div className="achievement-header">
+                    {achievement.title && (
+                      <p className="achievement-title">
+                        <strong>{achievement.title}</strong>
+                      </p>
+                    )}
+                    {achievement.date && (
+                      <p className="achievement-date">
+                        <strong>{achievement.date}</strong>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Render description if it exists */}
                   {achievement.description && (
-                    <ul className="bullet-list">
+                    <div className="achievement-description">
                       {achievement.description
                         .split("\n")
-                        .filter((line) => line.trim().startsWith("•"))
-                        .map((bullet, i) => (
-                          <li key={`ach-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
-                        ))}
-                    </ul>
+                        .map(
+                          (paragraph, i) =>
+                            paragraph.trim() && (
+                              <p key={`desc-${i}`}>{paragraph.trim()}</p>
+                            )
+                        )}
+                    </div>
                   )}
+
+                  {/* Render bullet points if they exist */}
                   {achievement.bullets && achievement.bullets.length > 0 && (
                     <ul className="bullet-list">
                       {achievement.bullets.map((bullet, i) => (
-                        <li key={`ach-bullet-${i}`}>{bullet.trim()}</li>
+                        <li key={`bullet-${i}`}>{bullet}</li>
                       ))}
                     </ul>
                   )}
                 </div>
-                {achievement.date && <p className="date-rhs"><strong>{achievement.date}</strong></p>}
               </div>
             ))}
           </section>
         )}
-
         {Object.values(skills).flat().length > 0 && (
           <section className="modern-section">
             <h2>SKILLS</h2>
@@ -349,17 +448,22 @@ const ResumePreview = ({ onBack }) => {
             <h2>OTHERS</h2>
             {languages.length > 0 && (
               <div className="languages-item">
-                <p><strong>Languages:</strong></p>
+                <p>
+                  <strong>Languages:</strong>
+                </p>
                 {languages.map((lang) => (
                   <p key={lang.id || Math.random()}>
-                    {lang.name && `${lang.name} (${lang.proficiency || "Proficiency"})`}
+                    {lang.name &&
+                      `${lang.name} (${lang.proficiency || "Proficiency"})`}
                   </p>
                 ))}
               </div>
             )}
             {extraCurriculars.length > 0 && (
               <div className="extraCurriculars-item">
-                <p><strong>Extracurricular Activities:</strong></p>
+                <p>
+                  <strong>Extracurricular Activities:</strong>
+                </p>
                 {extraCurriculars.map((activity) => (
                   <div key={activity.id || `act-${index}`}>
                     <div className="item-content">
@@ -370,7 +474,9 @@ const ResumePreview = ({ onBack }) => {
                             .split("\n")
                             .filter((line) => line.trim().startsWith("•"))
                             .map((bullet, i) => (
-                              <li key={`act-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                              <li key={`act-desc-bullet-${i}`}>
+                                {bullet.trim().slice(1).trim()}
+                              </li>
                             ))}
                         </ul>
                       )}
@@ -382,11 +488,17 @@ const ResumePreview = ({ onBack }) => {
                         </ul>
                       )}
                     </div>
-                    {(activity.startDate || activity.endDate || activity.current) && (
-                      <p className="date-rhs"><strong>
-                        {formatDate(activity.startDate)} –{" "}
-                        {activity.current ? "Present" : formatDate(activity.endDate)}
-                      </strong></p>
+                    {(activity.startDate ||
+                      activity.endDate ||
+                      activity.current) && (
+                      <p className="date-rhs">
+                        <strong>
+                          {formatDate(activity.startDate)} –{" "}
+                          {activity.current
+                            ? "Present"
+                            : formatDate(activity.endDate)}
+                        </strong>
+                      </p>
                     )}
                   </div>
                 ))}
@@ -444,7 +556,11 @@ const ResumePreview = ({ onBack }) => {
           {experience.map((exp) => (
             <div className="experience-item" key={exp.id || Math.random()}>
               <div className="item-content">
-                {exp.company && <p><strong>{exp.company}</strong></p>}
+                {exp.company && (
+                  <p>
+                    <strong>{exp.company}</strong>
+                  </p>
+                )}
                 {exp.position && <p>{exp.position}</p>}
                 {exp.location && <p>{exp.location}</p>}
                 {exp.description && (
@@ -453,7 +569,9 @@ const ResumePreview = ({ onBack }) => {
                       .split("\n")
                       .filter((line) => line.trim().startsWith("•"))
                       .map((bullet, i) => (
-                        <li key={`exp-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                        <li key={`exp-desc-bullet-${i}`}>
+                          {bullet.trim().slice(1).trim()}
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -466,10 +584,12 @@ const ResumePreview = ({ onBack }) => {
                 )}
               </div>
               {(exp.startDate || exp.endDate || exp.current) && (
-                <p className="date-rhs"><strong>
-                  {formatDate(exp.startDate)} –{" "}
-                  {exp.current ? "Present" : formatDate(exp.endDate)}
-                </strong></p>
+                <p className="date-rhs">
+                  <strong>
+                    {formatDate(exp.startDate)} –{" "}
+                    {exp.current ? "Present" : formatDate(exp.endDate)}
+                  </strong>
+                </p>
               )}
             </div>
           ))}
@@ -482,16 +602,26 @@ const ResumePreview = ({ onBack }) => {
           {education.map((edu) => (
             <div className="education-item" key={edu.id || Math.random()}>
               <div className="item-content">
-                {edu.institution && <p><strong>{edu.institution}</strong></p>}
+                {edu.institution && (
+                  <p>
+                    <strong>{edu.institution}</strong>
+                  </p>
+                )}
                 {edu.degree && <p>{edu.degree}</p>}
-                {edu.gpa && <p><strong>CGPA:</strong> {edu.gpa}/10</p>}
+                {edu.gpa && (
+                  <p>
+                    <strong>CGPA:</strong> {edu.gpa}/10
+                  </p>
+                )}
                 {edu.description && (
                   <ul className="bullet-list">
                     {edu.description
                       .split("\n")
                       .filter((line) => line.trim().startsWith("•"))
                       .map((bullet, i) => (
-                        <li key={`edu-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                        <li key={`edu-desc-bullet-${i}`}>
+                          {bullet.trim().slice(1).trim()}
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -504,10 +634,12 @@ const ResumePreview = ({ onBack }) => {
                 )}
               </div>
               {(edu.startDate || edu.endDate || edu.current) && (
-                <p className="date-rhs"><strong>
-                  {formatDate(edu.startDate)} –{" "}
-                  {edu.current ? "Present" : formatDate(edu.endDate)}
-                </strong></p>
+                <p className="date-rhs">
+                  <strong>
+                    {formatDate(edu.startDate)} –{" "}
+                    {edu.current ? "Present" : formatDate(edu.endDate)}
+                  </strong>
+                </p>
               )}
             </div>
           ))}
@@ -520,15 +652,23 @@ const ResumePreview = ({ onBack }) => {
           {projects.map((proj) => (
             <div className="project-item" key={proj.id || Math.random()}>
               <div className="item-content">
-                {proj.title && <p><strong>{proj.title}</strong></p>}
-                {proj.techStack && proj.techStack.length > 0 && <p>{proj.techStack.join(", ")}</p>}
+                {proj.title && (
+                  <p>
+                    <strong>{proj.title}</strong>
+                  </p>
+                )}
+                {proj.techStack && proj.techStack.length > 0 && (
+                  <p>{proj.techStack.join(", ")}</p>
+                )}
                 {proj.description && (
                   <ul className="bullet-list">
                     {proj.description
                       .split("\n")
                       .filter((line) => line.trim().startsWith("•"))
                       .map((bullet, i) => (
-                        <li key={`proj-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                        <li key={`proj-desc-bullet-${i}`}>
+                          {bullet.trim().slice(1).trim()}
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -541,10 +681,16 @@ const ResumePreview = ({ onBack }) => {
                 )}
               </div>
               {(proj.startDate || proj.endDate || proj.current) && (
-                <p className="date-rhs"><strong>
-                  {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
-                  {proj.current ? "Present" : proj.endDate ? formatDate(proj.endDate) : ""}
-                </strong></p>
+                <p className="date-rhs">
+                  <strong>
+                    {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
+                    {proj.current
+                      ? "Present"
+                      : proj.endDate
+                      ? formatDate(proj.endDate)
+                      : ""}
+                  </strong>
+                </p>
               )}
             </div>
           ))}
@@ -557,7 +703,11 @@ const ResumePreview = ({ onBack }) => {
           {certifications.map((cert) => (
             <div key={cert.id || Math.random()}>
               <div className="item-content">
-                {cert.name && <p><strong>{cert.name}</strong></p>}
+                {cert.name && (
+                  <p>
+                    <strong>{cert.name}</strong>
+                  </p>
+                )}
                 {(cert.issuer || cert.date) && (
                   <p>
                     {cert.issuer || "Issuing Organization"} •{" "}
@@ -571,7 +721,9 @@ const ResumePreview = ({ onBack }) => {
                       .split("\n")
                       .filter((line) => line.trim().startsWith("•"))
                       .map((bullet, i) => (
-                        <li key={`cert-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                        <li key={`cert-desc-bullet-${i}`}>
+                          {bullet.trim().slice(1).trim()}
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -583,7 +735,11 @@ const ResumePreview = ({ onBack }) => {
                   </ul>
                 )}
               </div>
-              {cert.date && <p className="date-rhs"><strong>{cert.date}</strong></p>}
+              {cert.date && (
+                <p className="date-rhs">
+                  <strong>{cert.date}</strong>
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -595,14 +751,20 @@ const ResumePreview = ({ onBack }) => {
           {achievements.map((achievement) => (
             <div key={achievement.id || Math.random()}>
               <div className="item-content">
-                {achievement.title && <p><strong>{achievement.title}</strong></p>}
+                {achievement.title && (
+                  <p>
+                    <strong>{achievement.title}</strong>
+                  </p>
+                )}
                 {achievement.description && (
                   <ul className="bullet-list">
                     {achievement.description
                       .split("\n")
                       .filter((line) => line.trim().startsWith("•"))
                       .map((bullet, i) => (
-                        <li key={`ach-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                        <li key={`ach-desc-bullet-${i}`}>
+                          {bullet.trim().slice(1).trim()}
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -614,7 +776,11 @@ const ResumePreview = ({ onBack }) => {
                   </ul>
                 )}
               </div>
-              {achievement.date && <p className="date-rhs"><strong>{achievement.date}</strong></p>}
+              {achievement.date && (
+                <p className="date-rhs">
+                  <strong>{achievement.date}</strong>
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -651,17 +817,22 @@ const ResumePreview = ({ onBack }) => {
           <h2>OTHERS</h2>
           {languages.length > 0 && (
             <div className="languages-item">
-              <p><strong>Languages:</strong></p>
+              <p>
+                <strong>Languages:</strong>
+              </p>
               {languages.map((lang) => (
                 <p key={lang.id || Math.random()}>
-                  {lang.name && `${lang.name} (${lang.proficiency || "Proficiency"})`}
+                  {lang.name &&
+                    `${lang.name} (${lang.proficiency || "Proficiency"})`}
                 </p>
               ))}
             </div>
           )}
           {extraCurriculars.length > 0 && (
             <div className="extraCurriculars-item">
-              <p><strong>Extracurricular Activities:</strong></p>
+              <p>
+                <strong>Extracurricular Activities:</strong>
+              </p>
               {extraCurriculars.map((activity) => (
                 <div key={activity.id || `act-${index}`}>
                   <div className="item-content">
@@ -672,7 +843,9 @@ const ResumePreview = ({ onBack }) => {
                           .split("\n")
                           .filter((line) => line.trim().startsWith("•"))
                           .map((bullet, i) => (
-                            <li key={`act-desc-bullet-${i}`}>{bullet.trim().slice(1).trim()}</li>
+                            <li key={`act-desc-bullet-${i}`}>
+                              {bullet.trim().slice(1).trim()}
+                            </li>
                           ))}
                       </ul>
                     )}
@@ -684,11 +857,17 @@ const ResumePreview = ({ onBack }) => {
                       </ul>
                     )}
                   </div>
-                  {(activity.startDate || activity.endDate || activity.current) && (
-                    <p className="date-rhs"><strong>
-                      {formatDate(activity.startDate)} –{" "}
-                      {activity.current ? "Present" : formatDate(activity.endDate)}
-                    </strong></p>
+                  {(activity.startDate ||
+                    activity.endDate ||
+                    activity.current) && (
+                    <p className="date-rhs">
+                      <strong>
+                        {formatDate(activity.startDate)} –{" "}
+                        {activity.current
+                          ? "Present"
+                          : formatDate(activity.endDate)}
+                      </strong>
+                    </p>
                   )}
                 </div>
               ))}
@@ -704,7 +883,8 @@ const ResumePreview = ({ onBack }) => {
     modern: ModernTemplate,
   };
 
-  const SelectedTemplate = TemplateComponents[resumeMetadata.template || "basic"];
+  const SelectedTemplate =
+    TemplateComponents[resumeMetadata.template || "basic"];
   const handleBack = () => {
     navigate(-1);
   };

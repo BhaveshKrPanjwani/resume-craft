@@ -218,3 +218,39 @@ hr {
 .project-tech {
   font-style: italic;
 }
+
+.modern-template {
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.modern-header h1 {
+  font-size: 28px;
+  color: #222;
+}
+
+.modern-section {
+  margin-bottom: 24px;
+}
+
+.bullet-list {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.bullet-list li {
+  margin-bottom: 4px;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

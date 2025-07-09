@@ -1,7 +1,9 @@
-import { Form, Input, DatePicker, Button, Space, Collapse } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form, Input, DatePicker, Button, Typography } from 'antd';
+import { DeleteOutlined, PlusOutlined, LinkOutlined } from '@ant-design/icons';
 import useResumeStore from '../../stores/useResumeStore';
-import dayjs from 'dayjs'; // Add this import
+import dayjs from 'dayjs';
+
+const { Text } = Typography;
 
 const Certifications = ({ isEditing = false }) => {
   const { certifications, addCertification, removeCertification } = useResumeStore();
@@ -9,12 +11,28 @@ const Certifications = ({ isEditing = false }) => {
   if (!isEditing) {
     return (
       <div className="certifications-section">
-        <h2>Certifications</h2>
+        <h2>CERTIFICATIONS</h2>
         {certifications.map((cert) => (
           <div key={cert.id} className="certification-item">
-            <h3>{cert.name}</h3>
-            <p>{cert.issuer} • {cert.date}</p>
-            {cert.credentialId && <p>Credential ID: {cert.credentialId}</p>}
+            <div className="certification-content">
+              <div className="certification-details">
+                <h3>{cert.name}</h3>
+                <p>{cert.issuer} • {cert.date}</p>
+                {cert.credentialId && <p>Credential ID: {cert.credentialId}</p>}
+              </div>
+              {cert.url && (
+                <div className="certificate-link-container">
+                  <a 
+                    href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="certificate-link"
+                  >
+                    <LinkOutlined /> View Certificate
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -28,11 +46,11 @@ const Certifications = ({ isEditing = false }) => {
         type="dashed" 
         icon={<PlusOutlined />} 
         onClick={() => addCertification({
-          id: Date.now(),
           name: '',
           issuer: '',
           date: '',
-          credentialId: ''
+          credentialId: '',
+          url: ''
         })}
         block
       >
@@ -65,6 +83,13 @@ const Certifications = ({ isEditing = false }) => {
                 <Input
                   value={cert.credentialId}
                   onChange={(e) => useResumeStore.getState().updateCertification(cert.id, { credentialId: e.target.value })}
+                />
+              </Form.Item>
+              <Form.Item label="Certificate URL (Optional)">
+                <Input
+                  value={cert.url}
+                  onChange={(e) => useResumeStore.getState().updateCertification(cert.id, { url: e.target.value })}
+                  placeholder="https://example.com/certificate"
                 />
               </Form.Item>
               <Button

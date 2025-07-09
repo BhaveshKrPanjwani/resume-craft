@@ -23,18 +23,28 @@ const useResumeStore = create(
         })),
 
       // Experience (company, position, startDate, endDate, location, description, bullets)
-      experience: [],
+     experience: [],
       addExperience: (newExperience) =>
         set((state) => ({
           experience: [
             ...state.experience,
-            { ...newExperience, id: Date.now().toString() },
+            { 
+              ...newExperience,
+              description: newExperience.description || "", // Ensure description exists
+              bullets: newExperience.bullets || [], // Ensure bullets exists
+              id: Date.now().toString() 
+            },
           ],
         })),
       updateExperience: (id, updatedFields) =>
         set((state) => ({
           experience: state.experience.map((exp) =>
-            exp.id === id ? { ...exp, ...updatedFields } : exp
+            exp.id === id ? { 
+              ...exp, 
+              ...updatedFields,
+              description: updatedFields.description ?? exp.description, // Nullish coalescing
+              bullets: updatedFields.bullets ?? exp.bullets
+            } : exp
           ),
         })),
       removeExperience: (id) =>
@@ -171,23 +181,27 @@ updateEducation: (id, updatedFields) =>
 
       // Certifications (name, id)
       certifications: [],
-      addCertification: (newCertification) =>
-        set((state) => ({
-          certifications: [
-            ...state.certifications,
-            { ...newCertification, id: Date.now().toString() },
-          ],
-        })),
-      updateCertification: (id, updatedFields) =>
-        set((state) => ({
-          certifications: state.certifications.map((cert) =>
-            cert.id === id ? { ...cert, ...updatedFields } : cert
-          ),
-        })),
-      removeCertification: (id) =>
-        set((state) => ({
-          certifications: state.certifications.filter((cert) => cert.id !== id),
-        })),
+addCertification: (newCertification) =>
+  set((state) => ({
+    certifications: [
+      ...state.certifications,
+      { 
+        ...newCertification, 
+        id: Date.now().toString(),
+        url: newCertification.url || '' // Ensure URL field exists
+      },
+    ],
+  })),
+updateCertification: (id, updatedFields) =>
+  set((state) => ({
+    certifications: state.certifications.map((cert) =>
+      cert.id === id ? { ...cert, ...updatedFields } : cert
+    ),
+  })),
+removeCertification: (id) =>
+  set((state) => ({
+    certifications: state.certifications.filter((cert) => cert.id !== id),
+  })),
 
       // Languages (name, proficiency, id)
       languages: [],
@@ -211,24 +225,28 @@ updateEducation: (id, updatedFields) =>
 
       // Achievements
       achievements: [],
-      addAchievement: (newAchievement) =>
-        set((state) => ({
-          achievements: [
-            ...state.achievements,
-            { ...newAchievement, id: Date.now().toString() },
-          ],
-        })),
-      updateAchievement: (id, updatedFields) =>
-        set((state) => ({
-          achievements: state.achievements.map((ach) =>
-            ach.id === id ? { ...ach, ...updatedFields } : ach
-          ),
-        })),
-      removeAchievement: (id) =>
-        set((state) => ({
-          achievements: state.achievements.filter((ach) => ach.id !== id),
-        })),
-
+addAchievement: (newAchievement) =>
+  set((state) => ({
+    achievements: [
+      ...state.achievements,
+      { 
+        ...newAchievement, 
+        id: Date.now().toString(),
+        description: newAchievement.description || '', // Ensure description exists
+        bullets: newAchievement.bullets || [] // Ensure bullets array exists
+      },
+    ],
+  })),
+updateAchievement: (id, updatedFields) =>
+  set((state) => ({
+    achievements: state.achievements.map((ach) =>
+      ach.id === id ? { ...ach, ...updatedFields } : ach
+    ),
+  })),
+removeAchievement: (id) =>
+  set((state) => ({
+    achievements: state.achievements.filter((ach) => ach.id !== id),
+  })),
       // Extracurriculars
       extraCurriculars: [],
       addExtraCurricular: (newItem) =>
@@ -253,7 +271,7 @@ updateEducation: (id, updatedFields) =>
 
       // Resume Metadata
       resumeMetadata: {
-        template: "basic",
+        template: "modern",
         colorScheme: "blue",
         fontSize: "medium",
         sectionOrder: [
@@ -332,7 +350,7 @@ updateEducation: (id, updatedFields) =>
           achievements: [],
           extraCurriculars: [],
           resumeMetadata: {
-            template: "basic",
+            template: "modern",
             colorScheme: "blue",
             fontSize: "medium",
             sectionOrder: [
@@ -405,7 +423,7 @@ updateEducation: (id, updatedFields) =>
           achievements: data.achievements || [],
           extraCurriculars: data.extraCurriculars || [],
           resumeMetadata: data.resumeMetadata || {
-            template: "basic",
+            template: "modern",
             colorScheme: "blue",
             fontSize: "medium",
             sectionOrder: [
@@ -457,7 +475,7 @@ updateEducation: (id, updatedFields) =>
             achievements: [],
             extraCurriculars: [],
             resumeMetadata: {
-              template: "basic",
+              template: "modern",
               colorScheme: "blue",
               fontSize: "medium",
               sectionOrder: [
@@ -488,5 +506,5 @@ updateEducation: (id, updatedFields) =>
     }
   )
 );
-
+console.log("Initial useResumeStore state:", useResumeStore.getState());
 export default useResumeStore;

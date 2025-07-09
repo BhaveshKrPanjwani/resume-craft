@@ -1,7 +1,7 @@
 import { DatePicker, Form, Input, Button, Space, message } from "antd";
 import { useState, useEffect } from "react";
 import useResumeStore from "../../stores/useResumeStore";
-import moment from "moment"; // Ensure moment.js is installed (npm install moment)
+import moment from "moment";
 
 const Experience = ({ isEditing }) => {
   const { experience, addExperience, updateExperience, removeExperience } = useResumeStore();
@@ -27,43 +27,83 @@ const Experience = ({ isEditing }) => {
     }
   }, [editingId, experience, editForm]);
 
+  const formatDescriptionToBullets = (description) => {
+    if (!description) return [];
+    
+    // If already has bullet points
+    if (description.includes('•')) {
+      return description
+        .split('\n')
+        .filter(line => line.trim().startsWith('•'))
+        .map(line => line.trim().slice(1).trim());
+    }
+    
+    // If plain text with newlines
+    if (description.includes('\n')) {
+      return description.split('\n').filter(line => line.trim());
+    }
+    
+    // Single line of text
+    return [description];
+  };
+
   const handleAddExperience = (values) => {
-    const { bullets, ...rest } = values;
+    const { bullets, description, ...rest } = values;
+    const formattedBullets = [
+      ...formatDescriptionToBullets(description),
+      ...(bullets ? bullets.split("\n").filter((b) => b.trim()) : [])
+    ];
+    
     const newExperience = {
       ...rest,
       startDate: values.startDate ? values.startDate.format("MM/YYYY") : null,
       endDate: values.endDate ? values.endDate.format("MM/YYYY") : null,
-      bullets: bullets ? bullets.split("\n").filter((b) => b.trim()) : [],
-      id: Date.now(), // Simple ID generation
+      bullets: formattedBullets,
+      description: null, // We'll only use bullets now
+      id: Date.now(),
     };
     addExperience(newExperience);
     form.resetFields();
   };
 
   const handleEditExperience = (values) => {
-    const { bullets, ...rest } = values;
+    const { bullets, description, ...rest } = values;
+    const formattedBullets = [
+      ...formatDescriptionToBullets(description),
+      ...(bullets ? bullets.split("\n").filter((b) => b.trim()) : [])
+    ];
+    
     const updatedExperience = {
       ...rest,
       startDate: values.startDate ? values.startDate.format("MM/YYYY") : null,
       endDate: values.endDate ? values.endDate.format("MM/YYYY") : null,
-      bullets: bullets ? bullets.split("\n").filter((b) => b.trim()) : [],
+      bullets: formattedBullets,
+      description: null, // We'll only use bullets now
       id: editingId,
     };
     updateExperience(updatedExperience, experience.findIndex((exp) => exp.id === editingId));
     setEditingId(null);
   };
 
-  const handleGenerateFormDescription = () => {
+  const handleGenerateFormDescription = async () => {
     setFormLoading(true);
-    // Placeholder for AI generation logic
-    setTimeout(() => {
+    try {
       const { company, position } = form.getFieldsValue();
       if (company && position) {
-        const description = `Worked at ${company} as ${position} - Developed key skills and contributed to team success.`;
-        form.setFieldsValue({ description });
+        // This would be your actual API call
+        const generatedBullets = [
+          `• Worked as ${position} at ${company}, contributing to team success`,
+          `• Developed key skills in [specific area] that improved [specific metric]`,
+          `• Collaborated with cross-functional teams to deliver [specific achievement]`
+        ];
+        form.setFieldsValue({ 
+          description: generatedBullets.join('\n'),
+          bullets: '' // Clear any existing bullets
+        });
       }
+    } finally {
       setFormLoading(false);
-    }, 1000);
+    }
   };
 
   const startEditing = (exp) => {
@@ -74,9 +114,21 @@ const Experience = ({ isEditing }) => {
       startDate: exp.startDate ? moment(exp.startDate, "MM/YYYY") : null,
       endDate: exp.endDate ? moment(exp.endDate, "MM/YYYY") : null,
       location: exp.location,
-      description: exp.description,
-      bullets: exp.bullets?.join("\n") || "",
+      description: exp.bullets?.map(b => `• ${b}`).join('\n') || "",
+      bullets: "",
     });
+  };
+
+  const renderBulletPoints = (bullets) => {
+    if (!bullets || bullets.length === 0) return null;
+    
+    return (
+      <ul style={{ marginBottom: 0 }}>
+        {bullets.map((bullet, i) => (
+          <li key={i}>{bullet}</li>
+        ))}
+      </ul>
+    );
   };
 
   return (
@@ -86,10 +138,6 @@ const Experience = ({ isEditing }) => {
           form={form}
           onFinish={handleAddExperience}
           layout="vertical"
-          onValuesChange={(changedValues, allValues) => {
-            console.log("Form values changed:", allValues);
-            console.log("Button disabled:", !allValues.company || !allValues.position);
-          }}
         >
           <h4>Add New Experience</h4>
           <Form.Item name="company" label="Company" rules={[{ required: true, message: "Company is required" }]}>
@@ -117,11 +165,11 @@ const Experience = ({ isEditing }) => {
           <Form.Item name="location" label="Location">
             <Input />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={3} />
+          <Form.Item name="description" label="Description (will be converted to bullet points)">
+            <Input.TextArea rows={3} placeholder="Enter description or bullet points (start with •)" />
           </Form.Item>
-          <Form.Item name="bullets" label="Bullet Points (one per line)">
-            <Input.TextArea rows={4} />
+          <Form.Item name="bullets" label="Additional Bullet Points (one per line)">
+            <Input.TextArea rows={4} placeholder="Enter additional bullet points (one per line)" />
           </Form.Item>
           <Form.Item>
             <Space>
@@ -129,12 +177,13 @@ const Experience = ({ isEditing }) => {
                 Add Experience
               </Button>
               <Button loading={formLoading} onClick={handleGenerateFormDescription}>
-                Generate AI Description
+                Generate AI Bullet Points
               </Button>
             </Space>
           </Form.Item>
         </Form>
       )}
+
       {editingId && isEditing && (
         <Form form={editForm} onFinish={handleEditExperience} layout="vertical">
           <h4>Edit Experience</h4>
@@ -163,11 +212,11 @@ const Experience = ({ isEditing }) => {
           <Form.Item name="location" label="Location">
             <Input />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={3} />
+          <Form.Item name="description" label="Description (will be converted to bullet points)">
+            <Input.TextArea rows={3} placeholder="Enter description or bullet points (start with •)" />
           </Form.Item>
-          <Form.Item name="bullets" label="Bullet Points (one per line)">
-            <Input.TextArea rows={4} />
+          <Form.Item name="bullets" label="Additional Bullet Points (one per line)">
+            <Input.TextArea rows={4} placeholder="Enter additional bullet points (one per line)" />
           </Form.Item>
           <Form.Item>
             <Space>
@@ -179,7 +228,24 @@ const Experience = ({ isEditing }) => {
           </Form.Item>
         </Form>
       )}
-      {experience.length === 0 && isEditing && (
+
+      {/* View Mode (non-editing) */}
+      {!isEditing && experience.length > 0 && (
+        <div className="experience-view-mode">
+          <h3>Work Experience</h3>
+          {experience.map((exp) => (
+            <div key={exp.id} className="experience-entry" style={{ marginBottom: 16 }}>
+              <h4>{exp.company} - {exp.position}</h4>
+              <p>{exp.startDate || "No start date"} - {exp.endDate || "Present"}</p>
+              {exp.location && <p>Location: {exp.location}</p>}
+              {renderBulletPoints(exp.bullets)}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Edit Mode Experience List */}
+      {isEditing && experience.length === 0 && (
         <p>No experiences added. Click "Add Experience" to start.</p>
       )}
       {isEditing &&
@@ -187,13 +253,8 @@ const Experience = ({ isEditing }) => {
           <div key={exp.id} className="experience-entry" style={{ marginBottom: 16, border: "1px solid #f0f0f0", padding: 8 }}>
             <h4>{exp.company} - {exp.position}</h4>
             <p>{exp.startDate || "No start date"} - {exp.endDate || "Present"}</p>
-            <p>Location: {exp.location || "Not specified"}</p>
-            <p>{exp.description || "No description provided"}</p>
-            <ul>
-              {exp.bullets?.map((bullet, i) => (
-                <li key={i}>{bullet}</li>
-              ))}
-            </ul>
+            {exp.location && <p>Location: {exp.location}</p>}
+            {renderBulletPoints(exp.bullets)}
             <Space>
               <Button onClick={() => startEditing(exp)} style={{ marginTop: 8 }}>
                 Edit

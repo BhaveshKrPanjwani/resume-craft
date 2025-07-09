@@ -178,3 +178,149 @@
     display: none;
   }
 }
+
+
+/* LaTeX-inspired styling */
+/* Add to your existing CSS */
+.latex-mode {
+  font-family: "Latin Modern Roman", "Times New Roman", serif;
+  color: #222;
+  line-height: 1.4;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.latex-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #222;
+  padding-bottom: 0.5rem;
+}
+
+.latex-header h1 {
+  font-size: 24pt;
+  font-weight: bold;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.latex-contact-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 10pt;
+}
+
+.latex-section {
+  margin-bottom: 1.5rem;
+}
+
+.latex-section h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.latex-item {
+  margin-bottom: 1rem;
+}
+
+.latex-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.latex-item-title {
+  font-weight: bold;
+  font-size: 11pt;
+}
+
+.latex-item-subtitle {
+  font-style: italic;
+  font-size: 10pt;
+}
+
+.latex-item-date {
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 10pt;
+}
+
+.latex-bullet-list {
+  list-style-type: none;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.latex-bullet-list li {
+  position: relative;
+  padding-left: 0.8rem;
+  margin-bottom: 0.3rem;
+  font-size: 10pt;
+}
+
+.latex-bullet-list li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.latex-link {
+  color: #222;
+  text-decoration: none;
+  border-bottom: 1px dotted #666;
+}
+
+.latex-link:hover {
+  border-bottom: 1px solid #222;
+}
+
+.latex-icon {
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+.latex-skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+
+.latex-skills-category {
+  margin-bottom: 0.5rem;
+}
+
+.latex-skills-category strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 10pt;
+}
+/* Add this to your CSS file (ats-resume.css or global.css) */
+.contact-info span, 
+.contact-info a {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px; /* Adjust spacing between items */
+}
+
+.contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px; /* Modern alternative to margin-right */
+}
+
+.icon {
+  display: inline-block; /* Ensures icons render correctly in PDF */
+  vertical-align: middle;
+  line-height: 1; /* Prevents extra space below icons */
+}

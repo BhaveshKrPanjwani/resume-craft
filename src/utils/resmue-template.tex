@@ -1,0 +1,86 @@
+% Defining the document class and basic setup
+\documentclass[11pt]{article}
+
+% Page geometry (2rem padding ≈ 28mm)
+\usepackage[margin=28mm]{geometry}
+
+% Times New Roman or Latin Modern Roman font
+\usepackage{times}
+
+% Section formatting for uppercase titles with horizontal rule
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\scshape}{\thesection}{1em}{}[\vspace{1mm}\hrule]
+\titlespacing*{\section}{0pt}{8mm}{5mm}
+
+% Customizing bullet points to match disc style
+\usepackage{enumitem}
+\setlist[itemize]{label=$\bullet$, leftmargin=12mm, itemsep=3mm, topsep=5mm}
+
+% Line spacing to match line-height: 1.4
+\usepackage{setspace}
+\linespread{1.4}
+
+% Flex-like layout for item headers
+\usepackage{tabularx}
+\usepackage{ragged2e}
+
+% Hyperlinks for contact info
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=black}
+
+% Prevent page breaks within items
+\usepackage{parskip}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+
+% Define commands for dynamic content
+\newcommand{\resumeName}[1]{\Huge\bfseries\scshape #1}
+\newcommand{\contactInfo}[4]{#1 \quad | \quad #2 \quad | \quad \href{#3}{LinkedIn} \quad | \quad \href{#4}{GitHub}}
+\newcommand{\projectEntry}[4]{
+  \begin{tabularx}{\textwidth}{X r}
+    \textbf{\normalsize #1} & \textbf{\normalsize #2} \\
+    \textit{\small #3} & \\
+  \end{tabularx}
+  \begin{itemize}
+    #4
+  \end{itemize}
+  \vspace{10mm}
+}
+\newcommand{\certificationEntry}[3]{
+  \begin{tabularx}{\textwidth}{X r}
+    \textbf{\normalsize #1} & \textbf{\normalsize #2} \\
+    \textit{\small #3} & \\
+  \end{tabularx}
+  \vspace{10mm}
+}
+\newcommand{\skillCategory}[2]{\item \textbf{#1:} #2}
+
+% Begin document
+\begin{document}
+
+% Centered header with bold name
+\begin{center}
+    \resumeName{<YOUR_NAME>} \\[8pt]
+    \small
+    \begin{tabular}{c}
+        \contactInfo{<YOUR_EMAIL>}{<YOUR_PHONE>}{<YOUR_LINKEDIN>}{<YOUR_GITHUB>} \\
+    \end{tabular}
+    \vspace{5mm}
+    \hrule
+\end{center}
+
+% Projects section with bold titles and dates
+\section{PROJECTS}
+<PROJECTS_CONTENT>
+
+% Certifications section
+\section{CERTIFICATIONS}
+<CERTIFICATIONS_CONTENT>
+
+% Skills section with bold categories
+\section{SKILLS}
+\begin{itemize}
+    <SKILLS_CONTENT>
+\end{itemize}
+
+\end{document}
