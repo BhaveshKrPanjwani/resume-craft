@@ -75,14 +75,15 @@ const DownloadButton = ({ targetRef, fileName = 'resume.pdf' }) => {
 
   return (
     <Button
-      type="primary"
-      icon={<DownloadOutlined />}
-      onClick={handlePrint}
-      loading={loading}
-      disabled={!targetRef?.current || loading}
-    >
-      Download PDF
-    </Button>
+  className="custom-download-button"
+  icon={<DownloadOutlined />}
+  onClick={handlePrint}
+  loading={loading}
+  disabled={!targetRef?.current || loading}
+>
+  Download PDF
+</Button>
+
   );
 };
 

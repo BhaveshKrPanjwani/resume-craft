@@ -60,14 +60,15 @@ const useResumeStore = create(
 
       // Education (institution, degree, field, startDate, endDate, gpa, description)
       education: [],
-      addEducation: (newEducation) =>
+addEducation: (newEducation) =>
   set((state) => ({
     education: [
       ...state.education,
       {
         ...newEducation,
         id: Date.now().toString(),
-        gpa: newEducation.gpa || "", // Changed from gradeValue to gpa
+        gradeValue: newEducation.gradeValue || "", // Changed from gpa to gradeValue
+        gradeType: newEducation.gradeType || 'cgpa' // Added gradeType
       },
     ],
   })),
@@ -78,7 +79,8 @@ updateEducation: (id, updatedFields) =>
         ? {
             ...edu,
             ...updatedFields,
-            gpa: updatedFields.gpa || edu.gpa, // Changed from gradeValue to gpa
+            gradeValue: updatedFields.gradeValue || edu.gradeValue, // Changed from gpa to gradeValue
+            gradeType: updatedFields.gradeType || edu.gradeType // Added gradeType
           }
         : edu
     ),

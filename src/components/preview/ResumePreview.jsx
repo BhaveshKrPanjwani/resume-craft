@@ -223,6 +223,7 @@ const ResumePreview = ({ onBack }) => {
         )}
 
         {/* Education Section */}
+        {/* Education Section */}
         {education.length > 0 && !hasLowCGPA && (
           <section className="latex-section">
             <h2>EDUCATION</h2>
@@ -231,17 +232,26 @@ const ResumePreview = ({ onBack }) => {
                 <div className="latex-item-header">
                   <div>
                     <h3 className="latex-item-title">{edu.institution}</h3>
-                    <p className="latex-item-subtitle">{edu.degree}</p>
-                    {edu.gpa && (
+                    <p className="latex-item-subtitle">
+                      {edu.degree} {edu.field && `in ${edu.field}`}
+                    </p>
+                    {edu.gradeValue && (
                       <p className="latex-item-subtitle">
-                        <strong>CGPA:</strong> {edu.gpa}/10
+                        <strong>
+                          {edu.gradeType === "percentage"
+                            ? "Percentage"
+                            : "CGPA"}
+                          :
+                        </strong>
+                        {edu.gradeValue}
+                        {edu.gradeType === "percentage" ? "%" : "/10"}
                       </p>
                     )}
                   </div>
-                  {(edu.startDate || edu.endDate || edu.current) && (
+                  {(edu.startDate || edu.endDate) && (
                     <p className="latex-item-date">
                       {formatDate(edu.startDate)} –{" "}
-                      {edu.current ? "Present" : formatDate(edu.endDate)}
+                      {edu.endDate ? formatDate(edu.endDate) : "Present"}
                     </p>
                   )}
                 </div>
@@ -260,42 +270,44 @@ const ResumePreview = ({ onBack }) => {
 
         {/* Projects Section */}
         {projects.length > 0 && (
-          <section className="latex-section">
-            <h2>PROJECTS</h2>
-            {projects.map((proj, index) => (
-              <div className="latex-item" key={proj.id || `proj-${index}`}>
-                <div className="latex-item-header">
-                  <div>
-                    <h3 className="latex-item-title">{proj.title}</h3>
-                    {proj.techStack && proj.techStack.length > 0 && (
-                      <p className="latex-item-subtitle">
-                        {proj.techStack.join(", ")}
-                      </p>
-                    )}
-                  </div>
-                  {(proj.startDate || proj.endDate || proj.current) && (
-                    <p className="latex-item-date">
-                      {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
-                      {proj.current
-                        ? "Present"
-                        : proj.endDate
-                        ? formatDate(proj.endDate)
-                        : ""}
-                    </p>
-                  )}
-                </div>
-                {renderBulletPoints(proj.description)}
-                {proj.bullets && proj.bullets.length > 0 && (
-                  <ul className="latex-bullet-list">
-                    {proj.bullets.map((bullet, i) => (
-                      <li key={`proj-bullet-${i}`}>{bullet.trim()}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+  <section className="latex-section">
+    <h2>PROJECTS</h2>
+    {projects.map((proj, index) => (
+      <div className="latex-item" key={proj.id || `proj-${index}`}>
+        <div className="latex-item-header">
+          <div>
+            <h3 className="latex-item-title">
+              {proj.title}
+              {proj.techStack && proj.techStack.length > 0 && (
+                <span className="latex-tech-stack">
+                  {" | " + proj.techStack.join(", ")}
+                </span>
+              )}
+            </h3>
+          </div>
+          {(proj.startDate || proj.endDate || proj.current) && (
+            <p className="latex-item-date">
+              {proj.startDate ? formatDate(proj.startDate) : ""} –{" "}
+              {proj.current
+                ? "Present"
+                : proj.endDate
+                ? formatDate(proj.endDate)
+                : ""}
+            </p>
+          )}
+        </div>
+        {renderBulletPoints(proj.description)}
+        {proj.bullets && proj.bullets.length > 0 && (
+          <ul className="latex-bullet-list">
+            {proj.bullets.map((bullet, i) => (
+              <li key={`proj-bullet-${i}`}>{bullet.trim()}</li>
             ))}
-          </section>
+          </ul>
         )}
+      </div>
+    ))}
+  </section>
+)}
 
         {certifications.length > 0 && (
           <section className="modern-section">
@@ -901,7 +913,7 @@ const ResumePreview = ({ onBack }) => {
         />
       </div>
 
-      <div className="preview-content">
+      <div className="preview-content" ref={resumeRef}>
         <SelectedTemplate />
       </div>
     </div>

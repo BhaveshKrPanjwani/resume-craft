@@ -10,13 +10,25 @@
 .modern-template {
   font-family: "Times New Roman", Times, serif;
   font-size: 10pt;
-  line-height: 1.4; /* Consistent with document's moderate line height */
+  line-height: 1.4;
   color: #000;
   width: 210mm;
   min-height: 297mm;
   margin: 0 auto;
   padding: 10mm;
   background: white;
+}
+
+.dark-mode .ats-resume,
+.dark-mode .modern-template {
+  background: var(--card-dark) !important;
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .ats-resume,
+[data-theme="dark"] .modern-template {
+  background: var(--card-dark) !important;
+  color: var(--text-light) !important;
 }
 
 /* Section Container - Consistent Layout */
@@ -27,6 +39,16 @@
   max-width: 210mm;
   margin-left: auto;
   margin-right: auto;
+}
+
+.dark-mode .resume-section,
+.dark-mode .modern-section {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .resume-section,
+[data-theme="dark"] .modern-section {
+  color: var(--text-light) !important;
 }
 
 /* Section Items - Fixed Structure */
@@ -43,6 +65,18 @@
   align-items: flex-start;
 }
 
+.dark-mode .experience-item,
+.dark-mode .education-item,
+.dark-mode .project-item {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .experience-item,
+[data-theme="dark"] .education-item,
+[data-theme="dark"] .project-item {
+  color: var(--text-light) !important;
+}
+
 .item-content {
   flex-grow: 1;
 }
@@ -57,14 +91,48 @@
   text-transform: uppercase;
 }
 
+.dark-mode .resume-header h1,
+.dark-mode .modern-header h1 {
+  color: var(--primary-light) !important;
+}
+
+[data-theme="dark"] .resume-header h1,
+[data-theme="dark"] .modern-header h1 {
+  color: var(--primary-light) !important;
+}
+
 .contact-info {
   font-size: 10pt;
   margin-bottom: 10mm;
   text-align: center;
 }
 
-.contact-info span {
-  margin: 0 5mm;
+.dark-mode .contact-info {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .contact-info {
+  color: var(--text-light) !important;
+}
+
+.contact-info span,
+.contact-info a {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 .resume-section h2,
@@ -75,6 +143,18 @@
   text-transform: uppercase;
   font-weight: bold;
   border-bottom: 1px solid #000;
+}
+
+.dark-mode .resume-section h2,
+.dark-mode .modern-section h2 {
+  color: var(--primary-light) !important;
+  border-bottom: 1px solid var(--border-dark) !important;
+}
+
+[data-theme="dark"] .resume-section h2,
+[data-theme="dark"] .modern-section h2 {
+  color: var(--primary-light) !important;
+  border-bottom: 1px solid var(--border-dark) !important;
 }
 
 /* Content Styling */
@@ -89,12 +169,44 @@
   margin-bottom: 2mm;
 }
 
+.dark-mode .position-title,
+.dark-mode .degree-info,
+.dark-mode .project-tech,
+.dark-mode .experience-dates,
+.dark-mode .education-dates,
+.dark-mode .project-dates,
+.dark-mode .education-gpa {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .position-title,
+[data-theme="dark"] .degree-info,
+[data-theme="dark"] .project-tech,
+[data-theme="dark"] .experience-dates,
+[data-theme="dark"] .education-dates,
+[data-theme="dark"] .project-dates,
+[data-theme="dark"] .education-gpa {
+  color: var(--text-light) !important;
+}
+
 .experience-description,
 .education-description,
 .project-description {
   font-size: 10pt;
   margin-bottom: 3mm;
   white-space: pre-line;
+}
+
+.dark-mode .experience-description,
+.dark-mode .education-description,
+.dark-mode .project-description {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .experience-description,
+[data-theme="dark"] .education-description,
+[data-theme="dark"] .project-description {
+  color: var(--text-light) !important;
 }
 
 /* Bullet Lists - Semantic and LaTeX-like */
@@ -110,6 +222,22 @@
   line-height: 1.4;
 }
 
+.dark-mode .bullet-list {
+  color: var(--text-light) !important;
+}
+
+.dark-mode .bullet-list li {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .bullet-list {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .bullet-list li {
+  color: var(--text-light) !important;
+}
+
 /* Skills and Others */
 .skills-container,
 .languages-item,
@@ -123,12 +251,369 @@
   margin-bottom: 2mm;
 }
 
+.dark-mode .skills-container,
+.dark-mode .languages-item,
+.dark-mode .extraCurriculars-item {
+  color: var(--text-light) !important;
+}
+
+.dark-mode .skill-category,
+.dark-mode .languages-item p,
+.dark-mode .extraCurriculars-item p {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .skills-container,
+[data-theme="dark"] .languages-item,
+[data-theme="dark"] .extraCurriculars-item {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .skill-category,
+[data-theme="dark"] .languages-item p,
+[data-theme="dark"] .extraCurriculars-item p {
+  color: var(--text-light) !important;
+}
+
 /* Date Styling - RHS Bold */
 .date-rhs {
   font-weight: bold;
   text-align: right;
-  margin-left: 10mm; /* Space between content and date */
+  margin-left: 10mm;
   white-space: nowrap;
+}
+
+.dark-mode .date-rhs {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .date-rhs {
+  color: var(--text-light) !important;
+}
+
+/* LaTeX-inspired styling */
+.latex-mode {
+  font-family: "Latin Modern Roman", "Times New Roman", serif;
+  color: #222;
+  line-height: 1.4;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dark-mode .latex-mode {
+  background: var(--card-dark) !important;
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-mode {
+  background: var(--card-dark) !important;
+  color: var(--text-light) !important;
+}
+
+.latex-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #222;
+  padding-bottom: 0.5rem;
+}
+
+.dark-mode .latex-header {
+  border-bottom: 2px solid var(--border-dark) !important;
+}
+
+[data-theme="dark"] .latex-header {
+  border-bottom: 2px solid var(--border-dark) !important;
+}
+
+.latex-header h1 {
+  font-size: 24pt;
+  font-weight: bold;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dark-mode .latex-header h1 {
+  color: var(--primary-light) !important;
+}
+
+[data-theme="dark"] .latex-header h1 {
+  color: var(--primary-light) !important;
+}
+
+.latex-contact-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 10pt;
+}
+
+.dark-mode .latex-contact-info {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-contact-info {
+  color: var(--text-light) !important;
+}
+
+.latex-section {
+  margin-bottom: 1.5rem;
+}
+
+.dark-mode .latex-section {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-section {
+  color: var(--text-light) !important;
+}
+
+.latex-section h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.dark-mode .latex-section h2 {
+  color: var(--primary-light) !important;
+  border-bottom: 1px solid var(--border-dark) !important;
+}
+
+[data-theme="dark"] .latex-section h2 {
+  color: var(--primary-light) !important;
+  border-bottom: 1px solid var(--border-dark) !important;
+}
+
+.latex-item {
+  margin-bottom: 1rem;
+}
+
+.dark-mode .latex-item {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-item {
+  color: var(--text-light) !important;
+}
+
+.latex-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.latex-item-title {
+  font-weight: bold;
+  font-size: 11pt;
+}
+
+.dark-mode .latex-item-title {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-item-title {
+  color: var(--text-light) !important;
+}
+
+.latex-item-subtitle {
+  font-style: italic;
+  font-size: 10pt;
+}
+
+.dark-mode .latex-item-subtitle {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-item-subtitle {
+  color: var(--text-light) !important;
+}
+
+.latex-item-date {
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 10pt;
+}
+
+.dark-mode .latex-item-date {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-item-date {
+  color: var(--text-light) !important;
+}
+
+.latex-bullet-list {
+  list-style-type: none;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.latex-bullet-list li {
+  position: relative;
+  padding-left: 0.8rem;
+  margin-bottom: 0.3rem;
+  font-size: 10pt;
+}
+
+.latex-bullet-list li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.dark-mode .latex-bullet-list {
+  color: var(--text-light) !important;
+}
+
+.dark-mode .latex-bullet-list li {
+  color: var(--text-light) !important;
+}
+
+.dark-mode .latex-bullet-list li:before {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-bullet-list {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-bullet-list li {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-bullet-list li:before {
+  color: var(--text-light) !important;
+}
+
+.latex-link {
+  color: #222;
+  text-decoration: none;
+  border-bottom: 1px dotted #666;
+}
+
+.dark-mode .latex-link {
+  color: var(--primary-light) !important;
+  border-bottom: 1px dotted var(--border-dark) !important;
+}
+
+.dark-mode .latex-link:hover {
+  border-bottom: 1px solid var(--primary-light) !important;
+}
+
+[data-theme="dark"] .latex-link {
+  color: var(--primary-light) !important;
+  border-bottom: 1px dotted var(--border-dark) !important;
+}
+
+[data-theme="dark"] .latex-link:hover {
+  border-bottom: 1px solid var(--primary-light) !important;
+}
+
+.latex-icon {
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+.latex-skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+
+.latex-skills-category {
+  margin-bottom: 0.5rem;
+}
+
+.latex-skills-category strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 10pt;
+}
+
+.dark-mode .latex-skills-container,
+.dark-mode .latex-skills-category strong {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .latex-skills-container,
+[data-theme="dark"] .latex-skills-category strong {
+  color: var(--text-light) !important;
+}
+
+/* Section Group */
+.section-group {
+  background-color: var(--card-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--box-border-radius);
+  padding: var(--box-padding);
+  margin-bottom: 20px;
+}
+
+.section-group h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.dark-mode .section-group {
+  background-color: #2d333b !important;
+  border-color: var(--border-dark) !important;
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .section-group {
+  background-color: #2d333b !important;
+  border-color: var(--border-dark) !important;
+  color: var(--text-light) !important;
+}
+
+.dark-mode .section-group h3 {
+  color: var(--primary-light) !important;
+}
+
+[data-theme="dark"] .section-group h3 {
+  color: var(--primary-light) !important;
+}
+
+/* Resume Editor */
+.resume-editor {
+  background: var(--card-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: var(--box-padding);
+  border-radius: var(--box-border-radius);
+}
+
+.dark-mode .resume-editor {
+  background: #1f1f1f !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .resume-editor {
+  background: #1f1f1f !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  color: var(--text-light) !important;
+}
+
+/* Ant Design Collapse */
+.ant-collapse-item {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.dark-mode .ant-collapse-item {
+  border-bottom-color: #434343 !important;
+}
+
+[data-theme="dark"] .ant-collapse-item {
+  border-bottom-color: #434343 !important;
 }
 
 /* Print Styles - Optimize for PDF */
@@ -140,6 +625,18 @@
     padding: 10mm !important;
     margin: 0 !important;
     box-shadow: none;
+  }
+
+  .dark-mode .ats-resume,
+  .dark-mode .modern-template {
+    background: var(--card-dark) !important;
+    color: var(--text-light) !important;
+  }
+
+  [data-theme="dark"] .ats-resume,
+  [data-theme="dark"] .modern-template {
+    background: var(--card-dark) !important;
+    color: var(--text-light) !important;
   }
 
   .resume-section,
@@ -163,6 +660,14 @@
     padding-left: 5mm !important;
   }
 
+  .dark-mode .bullet-list {
+    color: var(--text-light) !important;
+  }
+
+  [data-theme="dark"] .bullet-list {
+    color: var(--text-light) !important;
+  }
+
   .bullet-list li {
     margin-bottom: 2mm !important;
     break-inside: avoid;
@@ -174,153 +679,63 @@
     margin-left: 10mm !important;
   }
 
+  .dark-mode .date-rhs {
+    color: var(--text-light) !important;
+  }
+
+  [data-theme="dark"] .date-rhs {
+    color: var(--text-light) !important;
+  }
+
   .preview-toolbar {
     display: none;
   }
 }
 
-
-/* LaTeX-inspired styling */
-/* Add to your existing CSS */
-.latex-mode {
-  font-family: "Latin Modern Roman", "Times New Roman", serif;
-  color: #222;
-  line-height: 1.4;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Custom Download Button */
+.custom-download-button {
+  background-color: transparent !important;
+  border: none;
+  color: #52c41a;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.latex-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  border-bottom: 2px solid #222;
-  padding-bottom: 0.5rem;
+.custom-download-button:hover,
+.custom-download-button:focus {
+  background-color: #52c41a !important;
+  color: white !important;
+  border: none;
 }
 
-.latex-header h1 {
-  font-size: 24pt;
-  font-weight: bold;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.dark-mode .custom-download-button {
+  color: #73d13d !important;
 }
 
-.latex-contact-info {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  font-size: 10pt;
+.dark-mode .custom-download-button:hover,
+.dark-mode .custom-download-button:focus {
+  background-color: #73d13d !important;
+  color: var(--card-dark) !important;
 }
 
-.latex-section {
-  margin-bottom: 1.5rem;
+[data-theme="dark"] .custom-download-button {
+  color: #73d13d !important;
 }
 
-.latex-section h2 {
-  font-size: 12pt;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 1px solid #222;
-  padding-bottom: 0.2rem;
-  margin-bottom: 0.8rem;
+[data-theme="dark"] .custom-download-button:hover,
+[data-theme="dark"] .custom-download-button:focus {
+  background-color: #73d13d !important;
+  color: var(--card-dark) !important;
 }
-
-.latex-item {
-  margin-bottom: 1rem;
-}
-
-.latex-item-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.3rem;
+.latex-tech-stack {
+  font-weight: normal;
+  font-size: 0.9em;
+  color: #555;
+  margin-left: 0.5em;
 }
 
 .latex-item-title {
-  font-weight: bold;
-  font-size: 11pt;
-}
-
-.latex-item-subtitle {
-  font-style: italic;
-  font-size: 10pt;
-}
-
-.latex-item-date {
-  font-weight: bold;
-  white-space: nowrap;
-  font-size: 10pt;
-}
-
-.latex-bullet-list {
-  list-style-type: none;
-  padding-left: 1.2rem;
-  margin: 0.5rem 0;
-}
-
-.latex-bullet-list li {
-  position: relative;
-  padding-left: 0.8rem;
-  margin-bottom: 0.3rem;
-  font-size: 10pt;
-}
-
-.latex-bullet-list li:before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  font-weight: bold;
-}
-
-.latex-link {
-  color: #222;
-  text-decoration: none;
-  border-bottom: 1px dotted #666;
-}
-
-.latex-link:hover {
-  border-bottom: 1px solid #222;
-}
-
-.latex-icon {
-  margin-right: 0.3rem;
-  font-size: 0.9em;
-}
-
-.latex-skills-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.8rem;
-}
-
-.latex-skills-category {
-  margin-bottom: 0.5rem;
-}
-
-.latex-skills-category strong {
-  display: block;
-  margin-bottom: 0.2rem;
-  font-size: 10pt;
-}
-/* Add this to your CSS file (ats-resume.css or global.css) */
-.contact-info span, 
-.contact-info a {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 12px; /* Adjust spacing between items */
-}
-
-.contact-info {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 12px; /* Modern alternative to margin-right */
-}
-
-.icon {
-  display: inline-block; /* Ensures icons render correctly in PDF */
-  vertical-align: middle;
-  line-height: 1; /* Prevents extra space below icons */
+  margin-bottom: 0.2em;
 }
