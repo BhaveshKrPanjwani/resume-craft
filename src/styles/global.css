@@ -755,3 +755,74 @@
   color: white !important;
   border: none;
 }
+
+/* Base styling for the custom save button */
+.custom-save-button {
+  padding: 10px 20px !important; /* Matches box-padding and button sizing */
+  font-size: 16px !important; /* Matches site-title and other text */
+  font-weight: 600 !important; /* Consistent with item-title */
+  font-family: 'Inter', 'Roboto', 'Helvetica Neue', sans-serif !important; /* Matches app-layout */
+  border-radius: var(--box-border-radius) !important; /* 6px from ConfigProvider */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow like section-item */
+  transition: all 0.3s ease !important; /* Matches global transition */
+  background-color: var(--primary-color) !important; /* Matches theme primary */
+  color: #FFFFFF !important; /* White text for contrast */
+  border: none !important; /* Primary buttons have no border */
+}
+
+/* Hover state */
+.custom-save-button:hover {
+  background-color: var(--primary-dark) !important; /* Darker shade for hover */
+  transform: translateY(-1px) !important; /* Lift effect like dark-mode-toggle */
+}
+
+/* Active state */
+.custom-save-button:active {
+  background-color: darken(var(--primary-color), 10%) !important; /* Darker when pressed */
+  transform: translateY(0) !important;
+}
+
+/* Disabled state */
+.custom-save-button:disabled {
+  background-color: #A3BFFA !important; /* Lighter primary for disabled */
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* Dark mode styling */
+.dark-mode .custom-save-button {
+  background-color: var(--primary-color) !important; /* Retain primary color */
+  color: #FFFFFF !important; /* Ensure white text */
+}
+
+.dark-mode .custom-save-button:hover {
+  background-color: var(--primary-dark) !important; /* Darker hover */
+}
+
+.dark-mode .custom-save-button:active {
+  background-color: darken(var(--primary-color), 10%) !important;
+}
+
+.dark-mode .custom-save-button:disabled {
+  background-color: #A3BFFA !important; /* Lighter primary */
+  opacity: 0.6 !important;
+}
+
+/* Data-theme dark mode styling (for consistency) */
+[data-theme="dark"] .custom-save-button {
+  background-color: var(--primary-color) !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .custom-save-button:hover {
+  background-color: var(--primary-dark) !important;
+}
+
+[data-theme="dark"] .custom-save-button:active {
+  background-color: darken(var(--primary-color), 10%) !important;
+}
+
+[data-theme="dark"] .custom-save-button:disabled {
+  background-color: #A3BFFA !important;
+  opacity: 0.6 !important;
+}

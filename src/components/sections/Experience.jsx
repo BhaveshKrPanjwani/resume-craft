@@ -173,7 +173,12 @@ const Experience = ({ isEditing }) => {
           </Form.Item>
           <Form.Item>
             <Space>
-              <Button type="primary" htmlType="submit">
+               <Button
+                type="primary"
+                htmlType="submit"
+                // size="large" // Matches header button size
+                className="custom-save-button"
+              >
                 Add Experience
               </Button>
               <Button loading={formLoading} onClick={handleGenerateFormDescription}>

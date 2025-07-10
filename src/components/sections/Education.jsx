@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { Button, Input, Form, Space, Checkbox, DatePicker, message, Select, Radio } from "antd";
+import {
+  Button,
+  Input,
+  Form,
+  Space,
+  Checkbox,
+  DatePicker,
+  message,
+  Select,
+  Radio,
+} from "antd";
 import useResumeStore from "../../stores/useResumeStore";
 import { generateAIDescription } from "../../utils/aiDescriptionGenerator";
 import { v4 as uuidv4 } from "uuid";
@@ -8,14 +18,15 @@ import moment from "moment";
 const { Option } = Select;
 
 const Education = ({ isEditing }) => {
-  const { education, addEducation, updateEducation, removeEducation } = useResumeStore();
+  const { education, addEducation, updateEducation, removeEducation } =
+    useResumeStore();
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
   const [includeDescription, setIncludeDescription] = useState(false);
   const [loading, setLoading] = useState({});
   const [formLoading, setFormLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [gradeType, setGradeType] = useState('cgpa');
+  const [gradeType, setGradeType] = useState("cgpa");
 
   const degreeOptions = [
     "Intermediate/12th",
@@ -24,7 +35,7 @@ const Education = ({ isEditing }) => {
     "Bachelor's",
     "Master's",
     "PhD",
-    "Other"
+    "Other",
   ];
 
   useEffect(() => {
@@ -35,14 +46,18 @@ const Education = ({ isEditing }) => {
           institution: eduToEdit.institution,
           degree: eduToEdit.degree,
           field: eduToEdit.field,
-          startDate: eduToEdit.startDate ? moment(eduToEdit.startDate, "MM/YYYY") : null,
-          endDate: eduToEdit.endDate ? moment(eduToEdit.endDate, "MM/YYYY") : null,
+          startDate: eduToEdit.startDate
+            ? moment(eduToEdit.startDate, "MM/YYYY")
+            : null,
+          endDate: eduToEdit.endDate
+            ? moment(eduToEdit.endDate, "MM/YYYY")
+            : null,
           gradeValue: eduToEdit.gradeValue,
-          gradeType: eduToEdit.gradeType || 'cgpa',
+          gradeType: eduToEdit.gradeType || "cgpa",
           description: eduToEdit.description || "",
         });
         setIncludeDescription(!!eduToEdit.description);
-        setGradeType(eduToEdit.gradeType || 'cgpa');
+        setGradeType(eduToEdit.gradeType || "cgpa");
       }
     }
   }, [editingId, education, editForm]);
@@ -62,7 +77,7 @@ const Education = ({ isEditing }) => {
     addEducation(newEdu);
     form.resetFields();
     setIncludeDescription(false);
-    setGradeType('cgpa');
+    setGradeType("cgpa");
   };
 
   const handleEditEducation = async (values) => {
@@ -79,7 +94,7 @@ const Education = ({ isEditing }) => {
     editForm.resetFields();
     setEditingId(null);
     setIncludeDescription(false);
-    setGradeType('cgpa');
+    setGradeType("cgpa");
   };
 
   const handleGenerateFormDescription = async () => {
@@ -134,22 +149,32 @@ const Education = ({ isEditing }) => {
       {isEditing && (
         <Form form={form} onFinish={handleAddEducation} layout="vertical">
           <h4>Add New Education</h4>
-          <Form.Item name="institution" label="Institution" rules={[{ required: true, message: "Institution is required" }]}>
+          <Form.Item
+            name="institution"
+            label="Institution"
+            rules={[{ required: true, message: "Institution is required" }]}
+          >
             <Input />
           </Form.Item>
-          
-          <Form.Item name="degree" label="Degree" rules={[{ required: true, message: "Degree is required" }]}>
+
+          <Form.Item
+            name="degree"
+            label="Degree"
+            rules={[{ required: true, message: "Degree is required" }]}
+          >
             <Select placeholder="Select degree">
-              {degreeOptions.map(degree => (
-                <Option key={degree} value={degree}>{degree}</Option>
+              {degreeOptions.map((degree) => (
+                <Option key={degree} value={degree}>
+                  {degree}
+                </Option>
               ))}
             </Select>
           </Form.Item>
-          
+
           <Form.Item name="field" label="Field of Study">
             <Input />
           </Form.Item>
-          
+
           <Form.Item name="startDate" label="Start Date">
             <DatePicker
               picker="month"
@@ -158,7 +183,7 @@ const Education = ({ isEditing }) => {
               style={{ width: "100%" }}
             />
           </Form.Item>
-          
+
           <Form.Item name="endDate" label="End Date">
             <DatePicker
               picker="month"
@@ -167,34 +192,44 @@ const Education = ({ isEditing }) => {
               style={{ width: "100%" }}
             />
           </Form.Item>
-          
+
           <Form.Item name="gradeType" label="Grade Type" initialValue="cgpa">
             <Radio.Group onChange={(e) => setGradeType(e.target.value)}>
               <Radio value="cgpa">CGPA</Radio>
               <Radio value="percentage">Percentage</Radio>
             </Radio.Group>
           </Form.Item>
-          
-          <Form.Item 
-            name="gradeValue" 
-            label={gradeType === 'cgpa' ? 'CGPA' : 'Percentage'} 
+
+          <Form.Item
+            name="gradeValue"
+            label={gradeType === "cgpa" ? "CGPA" : "Percentage"}
             rules={[
-              { 
+              {
                 validator: (_, value) => {
-                  if (value && gradeType === 'percentage' && (value < 0 || value > 100)) {
-                    return Promise.reject('Percentage must be between 0 and 100');
+                  if (
+                    value &&
+                    gradeType === "percentage" &&
+                    (value < 0 || value > 100)
+                  ) {
+                    return Promise.reject(
+                      "Percentage must be between 0 and 100"
+                    );
                   }
-                  if (value && gradeType === 'cgpa' && (value < 0 || value > 10)) {
-                    return Promise.reject('CGPA must be between 0 and 10');
+                  if (
+                    value &&
+                    gradeType === "cgpa" &&
+                    (value < 0 || value > 10)
+                  ) {
+                    return Promise.reject("CGPA must be between 0 and 10");
                   }
                   return Promise.resolve();
-                }
-              }
+                },
+              },
             ]}
           >
             <Input type="number" />
           </Form.Item>
-          
+
           <Form.Item>
             <Checkbox
               checked={includeDescription}
@@ -212,13 +247,21 @@ const Education = ({ isEditing }) => {
 
           <Form.Item>
             <Space>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                // size="large" // Matches header button size
+                className="custom-save-button"
+              >
                 Add Education
               </Button>
               <Button
                 loading={formLoading}
                 onClick={handleGenerateFormDescription}
-                disabled={!form.getFieldValue("institution") || !form.getFieldValue("degree")}
+                disabled={
+                  !form.getFieldValue("institution") ||
+                  !form.getFieldValue("degree")
+                }
               >
                 Generate AI Description
               </Button>
@@ -230,22 +273,32 @@ const Education = ({ isEditing }) => {
       {editingId && isEditing && (
         <Form form={editForm} onFinish={handleEditEducation} layout="vertical">
           <h4>Edit Education</h4>
-          <Form.Item name="institution" label="Institution" rules={[{ required: true, message: "Institution is required" }]}>
+          <Form.Item
+            name="institution"
+            label="Institution"
+            rules={[{ required: true, message: "Institution is required" }]}
+          >
             <Input />
           </Form.Item>
-          
-          <Form.Item name="degree" label="Degree" rules={[{ required: true, message: "Degree is required" }]}>
+
+          <Form.Item
+            name="degree"
+            label="Degree"
+            rules={[{ required: true, message: "Degree is required" }]}
+          >
             <Select placeholder="Select degree">
-              {degreeOptions.map(degree => (
-                <Option key={degree} value={degree}>{degree}</Option>
+              {degreeOptions.map((degree) => (
+                <Option key={degree} value={degree}>
+                  {degree}
+                </Option>
               ))}
             </Select>
           </Form.Item>
-          
+
           <Form.Item name="field" label="Field of Study">
             <Input />
           </Form.Item>
-          
+
           <Form.Item name="startDate" label="Start Date">
             <DatePicker
               picker="month"
@@ -254,7 +307,7 @@ const Education = ({ isEditing }) => {
               style={{ width: "100%" }}
             />
           </Form.Item>
-          
+
           <Form.Item name="endDate" label="End Date">
             <DatePicker
               picker="month"
@@ -263,21 +316,21 @@ const Education = ({ isEditing }) => {
               style={{ width: "100%" }}
             />
           </Form.Item>
-          
+
           <Form.Item name="gradeType" label="Grade Type">
             <Radio.Group onChange={(e) => setGradeType(e.target.value)}>
               <Radio value="cgpa">CGPA</Radio>
               <Radio value="percentage">Percentage</Radio>
             </Radio.Group>
           </Form.Item>
-          
-          <Form.Item 
-            name="gradeValue" 
-            label={gradeType === 'cgpa' ? 'CGPA' : 'Percentage'}
+
+          <Form.Item
+            name="gradeValue"
+            label={gradeType === "cgpa" ? "CGPA" : "Percentage"}
           >
             <Input type="number" />
           </Form.Item>
-          
+
           <Form.Item>
             <Checkbox
               checked={includeDescription}
@@ -298,13 +351,14 @@ const Education = ({ isEditing }) => {
               <Button type="primary" htmlType="submit">
                 Save Changes
               </Button>
-              <Button onClick={() => setEditingId(null)}>
-                Cancel
-              </Button>
+              <Button onClick={() => setEditingId(null)}>Cancel</Button>
               <Button
                 loading={loading[editingId]}
                 onClick={() => handleGenerateDescription(editingId)}
-                disabled={!editForm.getFieldValue("institution") || !editForm.getFieldValue("degree")}
+                disabled={
+                  !editForm.getFieldValue("institution") ||
+                  !editForm.getFieldValue("degree")
+                }
               >
                 Generate AI Description
               </Button>
@@ -316,20 +370,38 @@ const Education = ({ isEditing }) => {
       {education.length === 0 && isEditing && (
         <p>No education entries added. Click "Add Education" to start.</p>
       )}
-      
+
       {education.map((edu) => (
-        <div key={edu.id} className="education-entry" style={{ marginBottom: 16, border: "1px solid #f0f0f0", padding: 8 }}>
-          <h4>{edu.institution} - {edu.degree}</h4>
+        <div
+          key={edu.id}
+          className="education-entry"
+          style={{ marginBottom: 16, border: "1px solid #f0f0f0", padding: 8 }}
+        >
+          <h4>
+            {edu.institution} - {edu.degree}
+          </h4>
           <p>{edu.field || "No field specified"}</p>
-          <p>{edu.startDate || "No start date"} - {edu.endDate || "Present"}</p>
-          <p>{edu.gradeType === 'percentage' ? 'Percentage' : 'CGPA'}: {edu.gradeValue || "Not specified"}</p>
+          <p>
+            {edu.startDate || "No start date"} - {edu.endDate || "Present"}
+          </p>
+          <p>
+            {edu.gradeType === "percentage" ? "Percentage" : "CGPA"}:{" "}
+            {edu.gradeValue || "Not specified"}
+          </p>
           <p>{edu.description || "No description provided"}</p>
           {isEditing && (
             <Space>
-              <Button onClick={() => startEditing(edu)} style={{ marginTop: 8 }}>
+              <Button
+                onClick={() => startEditing(edu)}
+                style={{ marginTop: 8 }}
+              >
                 Edit
               </Button>
-              <Button danger onClick={() => removeEducation(edu.id)} style={{ marginTop: 8 }}>
+              <Button
+                danger
+                onClick={() => removeEducation(edu.id)}
+                style={{ marginTop: 8 }}
+              >
                 Remove
               </Button>
             </Space>
