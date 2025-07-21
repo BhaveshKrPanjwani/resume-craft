@@ -34,3 +34,13 @@
   margin-bottom: 24px;
 }
 
+@media print {
+  .resume-preview {
+    width: 210mm;
+    height: auto;
+    padding: 10mm;
+    font-size: 12pt;
+    line-height: 1.2;
+  }
+  .no-print { display: none; }
+}

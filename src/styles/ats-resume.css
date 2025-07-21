@@ -106,6 +106,19 @@
   margin-bottom: 10mm;
   text-align: center;
 }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  margin-top: 5.5px;
+  /* font-size: 14px; */
+  vertical-align: middle;
+      margin-bottom: 5px;
+  line-height: 1.5;
+}
 
 .dark-mode .contact-info {
   color: var(--text-light) !important;
@@ -137,12 +150,12 @@
 
 .resume-section h2,
 .modern-section h2 {
-  font-size: 14pt;
-  margin: 0 0 5mm 0;
-  padding: 0;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-bottom: 1px solid #000;
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #222;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0.8rem;
 }
 
 .dark-mode .resume-section h2,
@@ -347,8 +360,9 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 0.5rem;
-  font-size: 10pt;
+  margin-top: 0.5rem; 
+   font-size: 10pt;
+  /* align-items: center; */
 }
 
 .dark-mode .latex-contact-info {
@@ -516,10 +530,10 @@
   border-bottom: 1px solid var(--primary-light) !important;
 }
 
-.latex-icon {
+/* .latex-icon {
   margin-right: 0.3rem;
   font-size: 0.9em;
-}
+} */
 
 .latex-skills-container {
   display: grid;
@@ -738,4 +752,13 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.2em;
+}@media print {
+  .resume-preview {
+    width: 210mm;
+    height: auto;
+    font-size: 12pt; /* Consistent font size */
+    line-height: 1.2; /* Avoid tight spacing */
+  }
+  /* Hide non-essential elements */
+  .no-print { display: none; }
 }

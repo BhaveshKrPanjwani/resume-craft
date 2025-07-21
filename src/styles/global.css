@@ -741,7 +741,7 @@
   font-size: 0.9em;
 }
 
-.custom-download-button {
+/* .custom-download-button {
   background-color: transparent !important;
   border: none;
   color: #52c41a;
@@ -754,10 +754,10 @@
   background-color: #52c41a !important;
   color: white !important;
   border: none;
-}
+} */
 
 /* Base styling for the custom save button */
-.custom-save-button {
+.custom-save-button,.custom-download-button {
   padding: 10px 20px !important; /* Matches box-padding and button sizing */
   font-size: 16px !important; /* Matches site-title and other text */
   font-weight: 600 !important; /* Consistent with item-title */
@@ -771,19 +771,19 @@
 }
 
 /* Hover state */
-.custom-save-button:hover {
+.custom-save-button:hover ,.custom-download-button:hover {
   background-color: var(--primary-dark) !important; /* Darker shade for hover */
   transform: translateY(-1px) !important; /* Lift effect like dark-mode-toggle */
 }
 
 /* Active state */
-.custom-save-button:active {
+.custom-save-button:active,.custom-download-button:active  {
   background-color: darken(var(--primary-color), 10%) !important; /* Darker when pressed */
   transform: translateY(0) !important;
 }
 
 /* Disabled state */
-.custom-save-button:disabled {
+.custom-save-button:disabled,.custom-download-button:disabled{
   background-color: #A3BFFA !important; /* Lighter primary for disabled */
   opacity: 0.6 !important;
   cursor: not-allowed !important;
@@ -803,7 +803,7 @@
   background-color: darken(var(--primary-color), 10%) !important;
 }
 
-.dark-mode .custom-save-button:disabled {
+.dark-mode .custom-save-button:disabled ,.custom-download-button{
   background-color: #A3BFFA !important; /* Lighter primary */
   opacity: 0.6 !important;
 }
@@ -825,4 +825,14 @@
 [data-theme="dark"] .custom-save-button:disabled {
   background-color: #A3BFFA !important;
   opacity: 0.6 !important;
+}
+@media print {
+  .resume-preview {
+    width: 210mm;
+    height: auto;
+    font-size: 12pt; /* Consistent font size */
+    line-height: 1.2; /* Avoid tight spacing */
+  }
+  /* Hide non-essential elements */
+  .no-print { display: none; }
 }

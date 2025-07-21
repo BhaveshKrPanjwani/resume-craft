@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { useState, useEffect, useCallback } from "react";
 
-const PDFGenerator = ({ targetElementId = "resume-preview", fileName = "resume.pdf" }) => {
+const PDFGenerator = ({ targetRef, fileName = "resume.pdf" }) => {
   const [loading, setLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -13,124 +13,90 @@ const PDFGenerator = ({ targetElementId = "resume-preview", fileName = "resume.p
     return () => setIsMounted(false);
   }, []);
 
-  const findResumeElement = useCallback(() => {
-    return (
-      document.getElementById(targetElementId) ||
-      document.querySelector(".preview-content") ||
-      document.querySelector(".modern-template") ||
-      document.querySelector(".ats-resume") ||
-      document.querySelector("#printable-content")
-    );
-  }, [targetElementId]);
-
   const generatePDF = useCallback(async () => {
-    if (!isMounted) return;
+    if (!isMounted || !targetRef?.current) return;
 
     setLoading(true);
     message.loading({ content: "Generating PDF...", key: "pdf", duration: 0 });
 
     try {
-      const element = findResumeElement();
-      if (!element) {
-        throw new Error("Resume content not found. Please ensure preview is open.");
-      }
+      const element = targetRef.current;
 
-      // Store and apply print styles
-      const originalStyles = {
-        position: element.style.position,
-        overflow: element.style.overflow,
-        width: element.style.width,
-        height: element.style.height,
-        display: element.style.display,
-        visibility: element.style.visibility,
-      };
+      // Clone and prepare for canvas
+      const clone = element.cloneNode(true);
+      clone.style.position = "fixed";
+      clone.style.top = "0";
+      clone.style.left = "0";
+      clone.style.width = "794px"; // A4 width at 96 DPI
+      clone.style.zIndex = "-999";
+      document.body.appendChild(clone);
 
-      Object.assign(element.style, {
-        position: "absolute",
-        left: "0",
-        top: "0",
-        width: "210mm",
-        height: "auto",
-        overflow: "visible",
-        display: "block",
-        visibility: "visible",
-        zIndex: 9999,
+      await new Promise((res) => setTimeout(res, 300));
+
+      const cloneRect = clone.getBoundingClientRect();
+      const links = clone.querySelectorAll("a");
+
+      const linkPositions = Array.from(links).map((link) => {
+        const rect = link.getBoundingClientRect();
+        return {
+          url: link.href,
+          x: rect.left - cloneRect.left,
+          y: rect.top - cloneRect.top,
+          width: rect.width,
+          height: rect.height
+        };
       });
 
-      // Wait for styles to apply
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Capture canvas with higher quality
-      const canvas = await html2canvas(element, {
-        scale: 2, // Increased for better resolution
+      const canvas = await html2canvas(clone, {
+        scale: 2,
         useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#FFFFFF",
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
-        logging: true, // Enable logs for debugging
+        backgroundColor: "#ffffff"
       });
 
-      // Restore original styles
-      Object.assign(element.style, originalStyles);
+      document.body.removeChild(clone);
 
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const imgWidth = 210; // A4 width in mm
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const pageHeight = 297; // A4 height in mm
 
-      if (imgHeight <= pageHeight) {
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
-      } else {
-        const totalPages = Math.ceil(imgHeight / pageHeight);
-        for (let i = 0; i < totalPages; i++) {
-          const srcY = (i * pageHeight) / 2; // Adjust for scale
-          pdf.addImage(
-            canvas.toDataURL("image/png"),
-            "PNG",
-            0,
-            -srcY,
-            imgWidth,
-            imgHeight,
-            undefined,
-            "FAST"
-          );
-          if (i < totalPages - 1) pdf.addPage();
-        }
-      }
+      pdf.addImage(canvas.toDataURL("image/jpeg", 1.0), "JPEG", 0, 0, imgWidth, imgHeight);
+
+      // Add clickable links
+      const scaleX = imgWidth / canvas.width;
+      const scaleY = imgHeight / canvas.height;
+
+      linkPositions.forEach(link => {
+        if (!link.url) return;
+
+        const x = link.x * scaleX;
+        const y = link.y * scaleY;
+        const w = link.width * scaleX;
+        const h = link.height * scaleY;
+
+        // Optional: Red box for debugging
+        // pdf.setDrawColor(255, 0, 0);
+        // pdf.rect(x, y, w, h);
+
+        pdf.link(x, y, w, h, { url: link.url });
+      });
 
       pdf.save(fileName);
-      message.success({ content: "PDF downloaded successfully!", key: "pdf" });
-    } catch (error) {
-      console.error("PDF generation error:", error);
-      message.error({
-        content:
-          error.message ||
-          "Failed to generate PDF. Please try in Chrome or ensure content is visible.",
-        key: "pdf",
-        duration: 5,
-      });
+      message.success({ content: "PDF downloaded!", key: "pdf" });
+    } catch (err) {
+      console.error("PDF generation failed", err);
+      message.error({ content: "PDF generation failed", key: "pdf" });
     } finally {
-      if (isMounted) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
-  }, [findResumeElement, fileName, isMounted]);
+  }, [targetRef, fileName, isMounted]);
 
   return (
     <Button
-      type="primary"
+      className="custom-download-button"
       icon={<DownloadOutlined />}
       onClick={generatePDF}
       loading={loading}
-      disabled={loading}
+      disabled={!targetRef?.current || loading}
     >
       Download PDF
     </Button>
