@@ -95,8 +95,8 @@ const AppContent = ({ darkMode }) => {
             <Routes>
               <Route path="/" element={<EditorWithNavigation />} />
               <Route path="/preview" element={<PreviewWithNavigation />} />
-              {/* <Route path="/ai-review" element={<AIAssistantLayout />} />
-              <Route path="/cover-letter" element={<CoverLetterLayout />} /> */}
+              <Route path="/ai-review" element={<AIAssistantLayout />} />
+              <Route path="/cover-letter" element={<CoverLetterLayout />} />
             </Routes>
           </div>
         </Content>
